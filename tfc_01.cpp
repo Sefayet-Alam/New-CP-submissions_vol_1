@@ -4,71 +4,110 @@ using namespace std;
 
 
 #define ll                  long long
-#define scl(n)              scanf("%lld", &n)
-#define fr(i,n)             for (ll i=0;i<n;i++)
-#define fr1(i,n)            for(ll i=1;i<=n;i++)
-#define pfl(x)              printf("%lld\n",x)
-#define endl 	            "\n"
-#define pb                  push_back
-#define asort(a)            sort(a,a+n)
-#define dsort(a)            sort(a,a+n,greater<int>())
-#define vasort(v)         sort(v.begin(), v.end());
-#define vdsort(v)         sort(v.begin(), v.end(),greater<ll>());
-#define pn                  printf("\n")
-#define md                  10000007
-#define debug               printf("I am here\n")
+// #define scl(n)              scanf("%lld", &n)
+// #define fr(i,n)             for (ll i=0;i<n;i++)
+// #define fr1(i,n)            for(ll i=1;i<=n;i++)
+// #define pfl(x)              printf("%lld\n",x)
+// #define pb                  push_back
+// #define asort(a)            sort(a,a+n)
+// #define dsort(a)            sort(a,a+n,greater<int>())
+// #define vasort(v)         sort(v.begin(), v.end());
+// #define vdsort(v)         sort(v.begin(), v.end(),greater<ll>());
+// #define pn                  printf("\n")
+// #define md                  10000007
+// #define debug               printf("I am here\n")
 
-#define l(s)                      s.size()
-#define tcas(i,t)             for(ll i=1;i<=t;i++)
-#define pcas(i)                printf("Case %lld: ",i)
-#define fast ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-const ll N=1e6+10;
-#define MOD 1000000007
+// #define l(s)                      s.size()
+// #define tcas(i,t)             for(ll i=1;i<=t;i++)
+// #define pcas(i)                printf("Case %lld: ",i)
+// #define fast ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+// #define deb(x) cout << #x << "=" << x << endl
+// #define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
+// #define Setpre(n) cout<<fixed<<setprecision(n)
+// inline ll GCD(ll a, ll b) { return b == 0 ? a : GCD(b, a % b); }
+// inline ll LCM(ll a, ll b) { return a * b / GCD(a, b); }
+// inline ll Ceil(ll p, ll q)  {return p < 0 ? p / q : p / q + !!(p % q);}
+// inline ll Floor(ll p, ll q) {return p > 0 ? p / q : p / q - !!(p % q);}
+// inline double logb(ll base,ll num){ return (double)log(num)/(double)log(base);}
 
 
-vector<bool> isPrime(N,true);
-vector<ll>primes;
-void primeSieve(){
-    isPrime[0]=isPrime[1]=false;
-    for(int i=2;i<N;i++) if(isPrime[i]==true) for(int j=2*i;j<N;j+=i) isPrime[j]=false;
 
-    for(ll i=1;i<N;i++){
-        if(isPrime[i]){
-            primes.push_back(i);
-        }
+// inline bool isPerfectSquare(long double x){ if (x >= 0) { long long sr = sqrt(x);return (sr * sr == x); }return false; }
+// double euclidean_distance(ll x1,ll y1,ll x2,ll y2){double a=(x2-x1)*(x2-x1);double b=(y2-y1)*(y2-y1);double c=(double)sqrt(a+b);return c;}
+// int popcount(ll x){return __builtin_popcountll(x);};
+// int poplow(ll x){return __builtin_ctzll(x);};
+// int pophigh(ll x){return 63 - __builtin_clzll(x);};
+
+
+
+// /*===================================================================//
+
+//         ░█▀▀▀█ ░█▀▀▀ ░█▀▀▀ ─█▀▀█ ░█──░█ ░█▀▀▀ ▀▀█▀▀
+//         ─▀▀▀▄▄ ░█▀▀▀ ░█▀▀▀ ░█▄▄█ ░█▄▄▄█ ░█▀▀▀ ─░█──
+//         ░█▄▄▄█ ░█▄▄▄ ░█─── ░█─░█ ──░█── ░█▄▄▄ ─░█──
+// //====================================================================*/
+
+// void setIO(){
+//     #ifndef ONLINE_JUDGE
+//     freopen("input.txt", "r", stdin);
+
+//     freopen("output.txt", "w", stdout);
+//     #endif // ONLINE_JUDGE
+
+// }
+
+
+struct custom_hash {
+    static uint64_t splitmix64(uint64_t x) {
+        x += 0x9e3779b97f4a7c15;
+        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+        return x ^ (x >> 31);
     }
+    size_t operator()(uint64_t x) const {
+        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+        return splitmix64(x + FIXED_RANDOM);
+    }
+};
 
-}
 
+vector<bool> Primes(100000000,true);
+ll Primenos[8000000];
 
 int main()
 {
-    fast;
+    //fast;
      ll t;
+    //setIO();
      //ll tno=1;;
-     t=1;
-    //cin>>t;
-   while(t--){
-    ll n;
-    cin>>n;
-    primeSieve();
-    map<ll,ll>cn;
-    ll cnt=0;
-    for(auto it:primes){
-        if(it>n) break;
-        while(n%it==0){
-            n/=it;
-            cn[it]++;
+     //t=1;
+    cin>>t;
+
+
+    ll N=100000000;
+
+     Primes[1]=false;
+    Primes[0]=false;
+    for(ll i=4;i<=N;i+=2) Primes[i]=false;
+    for (ll i=3;i*i<=N;i+=2) {
+    if(Primes[i]){
+        for(ll j=i*i;j<=N;j=j+(2*i)){Primes[j]=false;}
+      }
+    }
+    ll k=0;
+    Primenos[0]=2;
+    for(ll i=3;i<=N;i+=2){
+        if(Primes[i]){
+           Primenos[++k]=i;
         }
     }
-    ll maxm=-1,ans=n;
-    for(auto it:cn){
-        if(it.second>maxm){
-            maxm=it.second;
-            ans=it.first;
-        }
+
+    while(t--){
+        ll n;
+        cin>>n;
+        cout<<Primenos[n-1]<<endl;
     }
-    cout<<ans<<endl;
-   }
+
+
     return 0;
 }
