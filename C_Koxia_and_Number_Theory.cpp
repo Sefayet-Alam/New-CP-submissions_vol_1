@@ -69,26 +69,10 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-const int N = 300005;
-int T, n, ps[2];
-char a[N];
-
-void solve() {
-  scanf("%d %s", &n, a + 1);
-  ps[0] = ps[1] = 0;
-  for (int i = 1; i < n; ++i) {
-    ps[a[i] - 48] = i;
-    if (a[i] == '0')
-      printf("%d ", ps[1] + 1);
-    else
-      printf("%d ", ps[0] + 1);
-  }
-  putchar('\n');
-}
 
 int main()
 {
-    //fast;
+    fast;
      ll t;
     //setIO();
      //ll tno=1;;
@@ -96,7 +80,44 @@ int main()
     cin>>t;
 
     while(t--){
-       solve();
+        bool f=0;
+        ll n;
+        cin>>n;
+        vector<ll>vec(n);
+        for(ll i=0;i<n;i++){
+            cin>>vec[i];
+        }
+        bool k=0,r=0;
+        bool bol[n][n];
+        for(ll i=0;i<n;i++){
+            for(ll j=i+1;j<n;j++){
+                 k=0;
+                for(ll k=1;k<=1000;k++){
+                
+                    if(__gcd(vec[i]+k,vec[j]+k)==1){
+                     cout<<i<<" "<<j<<" "<<vec[i]+k<<" "<<vec[j]+k<<" "<<endl;
+                    k=1;
+                 
+                    break;
+                     }
+                    
+                }
+                if(k==0) f=1;
+            }
+            if(f) break;
+        }
+        
+        //  for(ll i=0;i<n;i++){
+        //     for(ll j=i+1;j<n;j++){
+        //         if(!bol[i][j]){
+        //             f=1;
+        //             break;
+        //         }
+        //         if(f) break;
+        //     }
+        //  }
+        if(f==0) cout<<"YES"<<endl;
+        else cout<<"NO"<<endl;
     }
 
 

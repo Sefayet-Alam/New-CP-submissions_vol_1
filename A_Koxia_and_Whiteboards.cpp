@@ -1,8 +1,8 @@
 #include<bits/stdc++.h>
-
+ 
 using namespace std;
-
-
+ 
+ 
 #define ll                  long long
 #define scl(n)              scanf("%lld", &n)
 #define fr(i,n)             for (ll i=0;i<n;i++)
@@ -16,7 +16,7 @@ using namespace std;
 #define pn                  printf("\n")
 #define md                  10000007
 #define debug               printf("I am here\n")
-
+ 
 #define l(s)                      s.size()
 #define tcas(i,t)             for(ll i=1;i<=t;i++)
 #define pcas(i)                printf("Case %lld: ",i)
@@ -30,33 +30,33 @@ inline ll Ceil(ll p, ll q)  {return p < 0 ? p / q : p / q + !!(p % q);}
 inline ll Floor(ll p, ll q) {return p > 0 ? p / q : p / q - !!(p % q);}
 inline double logb(ll base,ll num){ return (double)log(num)/(double)log(base);}
 #define M 10000
-
-
+ 
+ 
 inline bool isPerfectSquare(long double x){ if (x >= 0) { long long sr = sqrt(x);return (sr * sr == x); }return false; }
 double euclidean_distance(ll x1,ll y1,ll x2,ll y2){double a=(x2-x1)*(x2-x1);double b=(y2-y1)*(y2-y1);double c=(double)sqrt(a+b);return c;}
 int popcount(ll x){return __builtin_popcountll(x);};
 int poplow(ll x){return __builtin_ctzll(x);};
 int pophigh(ll x){return 63 - __builtin_clzll(x);};
-
-
-
+ 
+ 
+ 
 /*===================================================================//
             
         ░█▀▀▀█ ░█▀▀▀ ░█▀▀▀ ─█▀▀█ ░█──░█ ░█▀▀▀ ▀▀█▀▀ 
         ─▀▀▀▄▄ ░█▀▀▀ ░█▀▀▀ ░█▄▄█ ░█▄▄▄█ ░█▀▀▀ ─░█── 
         ░█▄▄▄█ ░█▄▄▄ ░█─── ░█─░█ ──░█── ░█▄▄▄ ─░█──
 //====================================================================*/
-
+ 
 void setIO(){
     #ifndef ONLINE_JUDGE
     freopen("input.txt", "r", stdin);
-
+ 
     freopen("output.txt", "w", stdout);
     #endif // ONLINE_JUDGE
-
+ 
 }
-
-
+ 
+ 
 struct custom_hash {
     static uint64_t splitmix64(uint64_t x) {
         x += 0x9e3779b97f4a7c15;
@@ -69,23 +69,7 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-const int N = 300005;
-int T, n, ps[2];
-char a[N];
-
-void solve() {
-  scanf("%d %s", &n, a + 1);
-  ps[0] = ps[1] = 0;
-  for (int i = 1; i < n; ++i) {
-    ps[a[i] - 48] = i;
-    if (a[i] == '0')
-      printf("%d ", ps[1] + 1);
-    else
-      printf("%d ", ps[0] + 1);
-  }
-  putchar('\n');
-}
-
+ 
 int main()
 {
     //fast;
@@ -94,11 +78,29 @@ int main()
      //ll tno=1;;
      //t=1;
     cin>>t;
-
+ 
     while(t--){
-       solve();
+        ll n,m;
+        cin>>n>>m;
+        vector<ll>a(n),b(m);
+        ll sum=0;
+        for(ll i=0;i<n;i++){
+            cin>>a[i];
+            sum+=a[i];
+        }
+         sort(a.begin(),a.end());  
+        for(ll i=0;i<m;i++){
+            sort(a.begin(),a.end());  
+            sum-=a[0]; 
+            cin>>b[i];
+            sum+=b[i];
+            a[0]=b[i];
+          
+        }
+        
+        cout<<sum<<endl;
     }
-
-
+ 
+ 
     return 0;
 }

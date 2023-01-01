@@ -69,26 +69,10 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-const int N = 300005;
-int T, n, ps[2];
-char a[N];
-
-void solve() {
-  scanf("%d %s", &n, a + 1);
-  ps[0] = ps[1] = 0;
-  for (int i = 1; i < n; ++i) {
-    ps[a[i] - 48] = i;
-    if (a[i] == '0')
-      printf("%d ", ps[1] + 1);
-    else
-      printf("%d ", ps[0] + 1);
-  }
-  putchar('\n');
-}
 
 int main()
 {
-    //fast;
+    fast;
      ll t;
     //setIO();
      //ll tno=1;;
@@ -96,7 +80,30 @@ int main()
     cin>>t;
 
     while(t--){
-       solve();
+        ll n;
+        string s;
+        cin>>n>>s;
+        map<string,ll>mp;
+        string p="",p2="";
+        bool f=0;
+        for(ll i=2;i<n;i++){
+            p="";
+            p+=s[i-2];
+            p+=s[i-1];
+            mp[p]++;
+            //cout<<p<<endl;
+            p2="";
+            p2+=s[i];
+            p2+=s[i+1];
+            if(mp[p2]>0) f=1;
+          
+        }
+        //cout<<endl;
+        //cout<<endl;
+        if(f) cout<<"YES"<<endl;
+        else cout<<"NO"<<endl;
+
+
     }
 
 
