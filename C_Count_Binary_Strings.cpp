@@ -80,27 +80,7 @@ int main()
     cin>>t;
 
     while(t--){
-       set<ll>sa,sb;
-       ll x,y;
-       for(ll i=0;i<3;i++){
-        cin>>x>>y;
-        sa.insert(x);
-        sb.insert(y);
-       }
-    //    for(auto it:sa){
-    //     cout<<it<<" ";
-    //    }
-    //    cout<<endl;
-    //    for(auto it:sb){
-    //     cout<<it<<" ";
-    //    }
-    //    cout<<endl;
-       if(sa.size()==2 && sb.size()==2){
-        cout<<"NO"<<endl;
-       }
-       else{
-        cout<<"YES"<<endl;
-       }
+
     }
 
 

@@ -70,6 +70,8 @@ struct custom_hash {
     }
 };
 
+
+
 int main()
 {
     fast;
@@ -80,27 +82,57 @@ int main()
     cin>>t;
 
     while(t--){
-       set<ll>sa,sb;
-       ll x,y;
-       for(ll i=0;i<3;i++){
-        cin>>x>>y;
-        sa.insert(x);
-        sb.insert(y);
-       }
-    //    for(auto it:sa){
-    //     cout<<it<<" ";
-    //    }
-    //    cout<<endl;
-    //    for(auto it:sb){
-    //     cout<<it<<" ";
-    //    }
-    //    cout<<endl;
-       if(sa.size()==2 && sb.size()==2){
-        cout<<"NO"<<endl;
-       }
-       else{
-        cout<<"YES"<<endl;
-       }
+        int n;
+        cin >> n;
+        int s = 1;
+        int e = n * n;
+        int arr[n][n];
+        for (int i = 0; i < n; i++)
+        {
+            if (i % 2 == 0)
+            {
+                for (int k = 0; k < n; k++)
+                {
+                    if (k % 2 == 0)
+                    {
+                        arr[i][k] = s;
+                        s++;
+                    }
+                    else
+                    {
+                        arr[i][k] = e;
+                        e--;
+                    }
+                }
+            }
+            else
+            {
+                for (int k = n - 1; k >= 0; k--)
+                {
+                    if (k % 2 == 0)
+                    {
+                        arr[i][k] = e;
+                        e--;
+                    }
+                    else
+                    {
+                        arr[i][k] = s;
+                        s++;
+                    }
+                }
+            }
+        }
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                cout << arr[i][j] << " ";
+            }
+            cout << "\n";
+        }
+        // cout << "\n";
+         
+   
     }
 
 

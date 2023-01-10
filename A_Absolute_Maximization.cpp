@@ -80,27 +80,23 @@ int main()
     cin>>t;
 
     while(t--){
-       set<ll>sa,sb;
-       ll x,y;
-       for(ll i=0;i<3;i++){
-        cin>>x>>y;
-        sa.insert(x);
-        sb.insert(y);
-       }
-    //    for(auto it:sa){
-    //     cout<<it<<" ";
-    //    }
-    //    cout<<endl;
-    //    for(auto it:sb){
-    //     cout<<it<<" ";
-    //    }
-    //    cout<<endl;
-       if(sa.size()==2 && sb.size()==2){
-        cout<<"NO"<<endl;
-       }
-       else{
-        cout<<"YES"<<endl;
-       }
+        ll n;
+        cin>>n;
+        vector<ll>vec(n);
+        ll maxm=0;
+        ll minm=0;
+        for(ll i=0;i<n;i++){
+            cin>>vec[i];
+           
+        }
+          minm=vec[0];
+            maxm=vec[0];
+         for(ll i=0;i<n;i++){
+            minm&=vec[i];
+            maxm|=vec[i];
+        }
+
+        cout<<maxm-minm<<endl;
     }
 
 

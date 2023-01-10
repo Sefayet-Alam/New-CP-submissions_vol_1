@@ -80,27 +80,22 @@ int main()
     cin>>t;
 
     while(t--){
-       set<ll>sa,sb;
-       ll x,y;
-       for(ll i=0;i<3;i++){
-        cin>>x>>y;
-        sa.insert(x);
-        sb.insert(y);
-       }
-    //    for(auto it:sa){
-    //     cout<<it<<" ";
-    //    }
-    //    cout<<endl;
-    //    for(auto it:sb){
-    //     cout<<it<<" ";
-    //    }
-    //    cout<<endl;
-       if(sa.size()==2 && sb.size()==2){
-        cout<<"NO"<<endl;
-       }
-       else{
-        cout<<"YES"<<endl;
-       }
+        ll n;
+        cin>>n;
+        vector<ll>vec(n);
+        for(ll i=0;i<n;i++){
+            cin>>vec[i];
+        }
+        ll diff=0;
+        sort(vec.begin()+1,vec.end());
+        for(ll i=1;i<n;i++){
+            if(vec[i]>vec[0]){
+                diff=vec[i]-vec[0]+1;
+                vec[0]+=diff/2;
+                vec[i]-=diff/2;
+            }
+        }
+        cout<<vec[0]<<endl;
     }
 
 
