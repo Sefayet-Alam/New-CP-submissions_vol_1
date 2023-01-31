@@ -33,9 +33,25 @@ void setIO(){
     #endif // ONLINE_JUDGE
 
 }
-void sieve(){
+// vector<bool> Primes(maxN,1);
+// vector<ll>primenos;
+ll divs[1002][1002];
+// void SieveOfEratosthenes(ll n)
+// {
+//     Primes[1]=0;
+//     for (ll i=2;i*i<=n;i++) {
+//     if(Primes[i]==1){     
+//     for(ll j=i*i;j<=n;j+=i)
+//         Primes[j]=0;
+//         }
+//     }
+//     for(ll i=1;i<=n;i++){
+//         if(Primes[i]){
+//             primenos.push_back(i);
+//         }
+//     }
+// }
 
-}
 
 int main()
 {
@@ -45,25 +61,53 @@ int main()
      //ll tno=1;;
      //t=1;
     cin>>t;
+    //SieveOfEratosthenes(1007);
+    memset(divs,0,sizeof(divs));
+    for(ll i=1;i<1001;i++){
+        for(ll j=i+1;j<1001;j++){
+            if(__gcd(i,j)==1){
+                divs[i][j]=1;
+            }
+            else divs[i][j]=0;
+        }
+    }
+    divs[1][1]=1;
+    // for(auto it:primenos){
+    //     cout<<it<<" ";
 
+    // }
+    // cout<<endl;
     while(t--){
         ll n;
         cin>>n;
-        vector<pair<ll,ll>>vec;
-        ll k;
+        vector<ll>vec(n);
+        vector<ll> vis(1001,0);
         for(ll i=0;i<n;i++){
-            cin>>k;
-            vec.push_back({k,i+1});
+            cin>>vec[i];
+            vis[vec[i]]=i+1;
         }
-        sort(vec.begin(),vec.end());
+       
         ll maxm=-1;
-        for(ll i=0;i<n;i++){
-          if(__gcd(vec[i].first,vec[n-i-1].first)==1){
-             maxm=max(maxm,vec[i].second+vec[n-i-1].second);
-                
+        //vector<pair<ll,ll> >ans;
+        for(ll i=0;i<1001;i++){
+            for(ll j=i;j<1001;j++){
+                if((divs[i][j] || divs[j][i]) && vis[i] && vis[j]){
+                   
+                   maxm=max(maxm,vis[i]+vis[j]);
+                }
             }
         }
-        cout<<maxm<<endl;
+        // for(auto it:ans){
+        //     cout<<it.first<<" "<<it.second<<endl;
+        // }
+        if(maxm==-1){cout<<-1<<endl;}
+        else{
+        
+            cout<<maxm<<endl;
+        }
+
+
+      
     }
 
 

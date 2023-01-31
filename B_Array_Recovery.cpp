@@ -53,7 +53,7 @@ int main()
        b[0]=a[0];
        for(ll i=1;i<n;i++){
         b[i]=b[i-1]+a[i];
-        if(b[i-1]-a[i]>0 && a[i]>0) {f=1;}
+        if(b[i-1]-a[i]>=0 && b[i]>=0 && b[i-1]-a[i]!=b[i]) {f=1;}
        }
        if(f) cout<<-1<<endl;
        else{
