@@ -38,7 +38,41 @@ int popcount(ll x){return __builtin_popcountll(x);};
 int poplow(ll x){return __builtin_ctzll(x);};
 int pophigh(ll x){return 63 - __builtin_clzll(x);};
 
-
+ 
+namespace io{
+    template<typename First, typename Second> ostream& operator << ( ostream &os, const pair<First, Second> &p ) { return os << p.first << " " << p.second; }
+    template<typename First, typename Second> ostream& operator << ( ostream &os, const map<First, Second> &mp ) { for( auto it : mp ) { os << it << endl;  } return os; }
+    template<typename First> ostream& operator << ( ostream &os, const vector<First> &v ) { bool space = false; for( First x : v ) { if( space ) os << " "; space = true; os << x; } return os; }
+    template<typename First> ostream& operator << ( ostream &os, const set<First> &st ) { bool space = false; for( First x : st ) { if( space ) os << " "; space = true; os << x; } return os; }
+    template<typename First> ostream& operator << ( ostream &os, const multiset<First> &st ) { bool space = false; for( First x : st ) { if( space ) os << " "; space = true; os << x; } return os; }
+ 
+    template<typename First, typename Second> istream& operator >> ( istream &is, pair<First, Second> &p ) { return is >> p.first >> p.second; }
+    template<typename First> istream& operator >> ( istream &is, vector<First> &v ) { for( First &x : v ) { is >> x; } return is; }
+    
+    long long fastread(){ char c; long long d = 1, x = 0; do c = getchar(); while( c == ' ' || c == '\n' ); if( c == '-' ) c = getchar(), d = -1; while( isdigit( c ) ){ x = x * 10 + c - '0'; c = getchar(); } return d * x; }
+    
+    static bool sep = false;
+ 
+    using std::to_string;
+ 
+    string to_string( bool x ){ return ( x ? "true" : "false" ); }
+    string to_string( const string & s ){ return "\"" + s + "\""; }
+    string to_string( const char * s ){ return "\"" + string( s ) + "\""; }
+    string to_string ( const char & c ) { string s; s += c; return "\'" + s + "\'"; }
+ 
+    template<typename Type> string to_string( vector<Type> );
+    template<typename First, typename Second> string to_string( pair<First, Second> );
+    template<typename Collection> string to_string( Collection );
+ 
+    template<typename First, typename Second> string to_string( pair<First, Second> p ){ return "{" + to_string( p.first ) + ", " + to_string( p.second ) + "}"; }
+    template<typename Type> string to_string( vector<Type> v ) { bool sep = false; string s = "["; for( Type x: v ){ if( sep ) s += ", "; sep = true; s += to_string( x ); } s += "]"; return s; }
+    template<typename Collection> string to_string( Collection collection ) { bool sep = false; string s = "{"; for( auto x: collection ){ if( sep ) s += ", "; sep = true; s += to_string( x ); } s += "}"; return s; }
+ 
+    void print() { cerr << endl; sep = false; }
+    template <typename First, typename... Other> void print( First first, Other... other ) { if( sep ) cerr << " | "; sep = true; cerr << to_string( first ); print( other... ); }
+    
+} using namespace io;
+ 
 
 /*===================================================================//
             
@@ -69,45 +103,23 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-
-string solve(int m, string c1, string c2) {
-    // Starting position is top left corner
-    int x = 0, y = 0;
-    set<pair<int, int>> visited;
-
-    // Keep track of the number of black cells visited
-    int black_cells_visited = 0;
-
-    // While we have not visited all of the black cells
-    while (black_cells_visited < m) {
-        // Check if current cell is black and not visited
-        if (c1[y] == 'B' && visited.count({x, y}) == 0) {
-            black_cells_visited++;
-            visited.insert({x, y});
-        }
-        
-        // Check if we can move down
-        if (x < 1 && c2[y] == 'B') {
-            x++;
-        }
-        // Check if we can move right
-        else if (y < m - 1 && c1[y + 1] == 'B') {
-            y++;
-        }
-        // Check if we can move up
-        else if (x > 0 && c1[y] == 'B') {
-            x--;
-        }
-        // Otherwise, we cannot find a valid path
-        else {
-            return "NO";
-        }
+int n;
+const ll N=2e5+10;
+string s[2];
+int vis[2][N];
+int f = 0;
+ 
+void dfs(int i, int j){
+    if(j==n-1) f = 1;
+    vis[i][j] = 1;
+ 
+    if(s[!i][j]=='B' && vis[!i][j]==0){
+        dfs(!i, j);
     }
-
-    // Return "YES" if we have visited all of the black cells
-    return "YES";
+    else if(s[i][j+1]=='B' && vis[i][j+1]==0){
+        dfs(i, j+1);
+    }
 }
-
 int main()
 {
     fast;
@@ -118,11 +130,26 @@ int main()
     cin>>t;
 
     while(t--){
-        ll n;
-        string str1,str2;
+      
+         f=0;
         cin>>n;
-        cin>>str1>>str2;
-        cout<<solve(n,str1,str2)<<endl;
+    
+
+       cin>>s[0]>>s[1];
+
+        
+        memset(vis[0], 0, sizeof(vis[0][0])*(n+2));
+        memset(vis[1], 0, sizeof(vis[1][0])*(n+2));
+ 
+        if(s[0][0]=='B') dfs(0, 0);
+ 
+        memset(vis[0], 0, sizeof(vis[0][0])*(n+2));
+        memset(vis[1], 0, sizeof(vis[1][0])*(n+2));
+ 
+        if(s[1][0]=='B') dfs(1, 0);
+ 
+        if(f) cout<<"YES"<<endl;
+        else cout<<"NO"<<endl;
     }
 
 
