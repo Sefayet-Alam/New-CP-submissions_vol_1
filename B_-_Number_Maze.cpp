@@ -4,66 +4,49 @@
 using namespace std;
 using namespace __gnu_pbds;
 
-//VVI
-#define fast ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define pb                  push_back
-#define ll                  long long
-#define ff first
-#define ss second
-#define SZ(a) (int)a.size()
-#define UNIQUE(a) (a).erase(unique(all(a)),(a).end())
-#define eb emplace_back
-#define mp make_pair
-
-
-///BIT MANIPULATION
-
+#include<ext/pb_ds/assoc_container.hpp>
+#include<ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+#define nn '\n'
+#define fo(i,n) for(i=0;i<n;i++)
+#define deb(x) cout << #x << "=" << x << endl
+#define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
+#define Setpre(n) cout<<fixed<<setprecision(n)
+#define all(x) x.begin(), x.end()
+#define rev(x) reverse(all(x))
+#define sortall(x) sort(all(x))
+#define mem(a,b) memset(a,b,sizeof(a))
+#define fast_IO ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0)
 #define Set(x, k) (x |= (1LL << k))
 #define Unset(x, k) (x &= ~(1LL << k))
 #define Check(x, k) (x & (1LL << k))
 #define Toggle(x, k) (x ^ (1LL << k))
-
-//LOOPS
-
+#define ll                  long long
 #define scl(n)              scanf("%lld", &n)
 #define fr(i,n)             for (ll i=0;i<n;i++)
 #define fr1(i,n)            for(ll i=1;i<=n;i++)
-#define Fo(i,k,n) for(i=k;k<n?i<n:i>n;k<n?i+=1:i-=1)
-
-///PRINTING
-
-#define deb(x) cout << #x << "=" << x << endl
-#define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
-#define nn '\n'
 #define pfl(x)              printf("%lld\n",x)
-#define pcas(i)                printf("Case %lld: ",i)
-#define Setpre(n) cout<<fixed<<setprecision(n)
-#define itr(it, a) for(auto it = a.begin(); it != a.end(); it++)
-#define debug               printf("I am here\n")
-
-///SORTING AND FILLING
-
+#define pb                  push_back
 #define asort(a)            sort(a,a+n)
 #define dsort(a)            sort(a,a+n,greater<int>())
 #define vasort(v)         sort(v.begin(), v.end());
 #define vdsort(v)         sort(v.begin(), v.end(),greater<ll>());
-#define rev(x) reverse(all(x))
-#define sortall(x) sort(all(x))
-#define mem(a,b) memset(a,b,sizeof(a))
-#define all(x) x.begin(), x.end()
-#define rev(x) reverse(all(x))
-
-//CONSTANTS
+#define pn                  printf("\n")
 #define md                  10000007
-#define PI 3.1415926535897932384626
-
-
-///INLINE FUNCTIONS
+#define debug               printf("I am here\n")
+#define l(s)                      s.size()
+#define tcas(i,t)             for(ll i=1;i<=t;i++)
+#define pcas(i)                printf("Case %lld: ",i)
+#define fast ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define deb(x) cout << #x << "=" << x << endl
+#define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
+#define Setpre(n) cout<<fixed<<setprecision(n)
 inline ll GCD(ll a, ll b) { return b == 0 ? a : GCD(b, a % b); }
 inline ll LCM(ll a, ll b) { return a * b / GCD(a, b); }
 inline ll Ceil(ll p, ll q)  {return p < 0 ? p / q : p / q + !!(p % q);}
 inline ll Floor(ll p, ll q) {return p > 0 ? p / q : p / q - !!(p % q);}
 inline double logb(ll base,ll num){ return (double)log(num)/(double)log(base);}
+
 inline bool isPerfectSquare(long double x){ if (x >= 0) { long long sr = sqrt(x);return (sr * sr == x); }return false; }
 double euclidean_distance(ll x1,ll y1,ll x2,ll y2){double a=(x2-x1)*(x2-x1);double b=(y2-y1)*(y2-y1);double c=(double)sqrt(a+b);return c;}
 int popcount(ll x){return __builtin_popcountll(x);};
@@ -80,9 +63,9 @@ template <typename T> using QP = priority_queue<T,vector<T>,greater<T>>;
 
 template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 template <typename T,typename R> using ordered_map = tree<T, R , less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-;
+
 const double EPS = 1e-9;
-const ll N = 2e5+10;
+const ll N = 2e3+7;
 const ll M = 1e9+7;
 
  
@@ -151,28 +134,88 @@ struct custom_hash {
     }
 };
 
+vector<pair<ll,ll> >directions={{1,0},{-1,0},{0,1},{0,-1}};
+
+ll n,m,k;
+
+const ll INF=1e14+9;
+ll grid[N][N];
+
+ll level[N][N];
+bool isvalid(ll i,ll j){
+    if(i>=n || j>=m || i<0 || j<0) return false;
+    return true;
+}
+
+void dijskstra(ll srcx,ll srcy){
+   QP<pair<ll,pair<ll,ll> > > pq;
+    pq.push({grid[srcx][srcy],{srcx,srcy}});
+    level[srcx][srcy]=grid[srcx][srcy];
+     while(pq.size()){
+        ll vx=pq.top().second.first;
+        ll vy=pq.top().second.second;
+        ll v_dist=pq.top().first;
+        //cout<<vx<<" "<<vy<<" "<<v_dist<<endl;
+        pq.pop();
+        if(v_dist>level[vx][vy]) {continue;}
+        for(ll i=0;i<4;i++){
+            ll child_vx=vx+directions[i].first;
+            ll child_vy=vy+directions[i].second;
+           
+            if(isvalid(child_vx,child_vy)){
+             ll wt=grid[child_vx][child_vy];
+             if(level[vx][vy]+wt>level[child_vx][child_vy]) continue;
+              if(level[vx][vy]+wt<level[child_vx][child_vy]){
+                level[child_vx][child_vy]=level[vx][vy]+wt;
+                //par[child_v]=v;
+                pq.push({level[child_vx][child_vy],{child_vx,child_vy}});
+            }
+            }
+        }
+    }
+
+}
+void reset(ll n,ll m){
+    for(ll i=0;i<=n;i++){
+        for(ll j=0;j<=m;j++){
+            //vis[i][j]=0;
+            level[i][j]=INF;
+        }
+    }
+}
 int main()
 {
     fast;
      ll t;
     //setIO();
      //ll tno=1;;
-     t=1;
+     //t=1;
     cin>>t;
 
     while(t--){
-    ll a,b,c;
-    cin>>a>>b>>c;
-    if(a<c){
-        cout<<1<<" ";
-    }
-    else{
-        cout<<-1<<" ";
-    }
-    if(b*a>c){
-        cout<<b<<endl;
-    }
-    else cout<<-1<<endl;
+        cin>>n>>m;
+        reset(n,m);
+        for(ll i=0;i<n;i++){
+            for(ll j=0;j<m;j++){
+              cin>>grid[i][j];  
+            }
+        }
+        // for(ll i=0;i<n;i++){
+        //     for(ll j=0;j<m;j++){
+        //       cout<<grid[i][j]<<" ";  
+        //     }
+        //     cout<<endl;
+        // }
+        dijskstra(0,0);
+        // for(ll i=0;i<n;i++){
+        //     for(ll j=0;j<m;j++){
+        //       cout<<level[i][j]<<" ";  
+        //     }
+        //     cout<<endl;
+        // }
+        cout<<level[n-1][m-1]<<"\n";  
+        
+
     }
 
 

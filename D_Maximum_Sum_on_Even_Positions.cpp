@@ -15,7 +15,6 @@ using namespace __gnu_pbds;
 #define eb emplace_back
 #define mp make_pair
 
-
 ///BIT MANIPULATION
 
 #define Set(x, k) (x |= (1LL << k))
@@ -151,6 +150,10 @@ struct custom_hash {
     }
 };
 
+template<class T> bool ckmin(T& a, const T& b) { return b < a ? a = b, 1 : 0; }
+template<class T> bool ckmax(T& a, const T& b) { return a < b ? a = b, 1 : 0; }
+
+
 int main()
 {
     fast;
@@ -161,19 +164,33 @@ int main()
     cin>>t;
 
     while(t--){
-    ll a,b,c;
-    cin>>a>>b>>c;
-    if(a<c){
-        cout<<1<<" ";
+     int n;
+    cin >> n;
+    vector <int> a(n);
+    ll s = 0;
+    for (int i = 0; i < n; i++) {
+      cin >> a[i];
+      if (i % 2 == 0) s += a[i];
     }
-    else{
-        cout<<-1<<" ";
+    ll here = s;
+    vector <ll> p(n + 1);
+    s = 0;
+    for (int i = 0; i < n; i++) {
+      if (i % 2 == 0) a[i] *= -1;
+      s += a[i];
+      p[i + 1] = s;
     }
-    if(b*a>c){
-        cout<<b<<endl;
+    ll ans = 0;
+    for (int parity = 0; parity < 2; parity++) {
+      ll mn = 0;
+      for (int i = parity; i <= n; i += 2) {
+        ans = max(ans, p[i] - mn);
+        mn = min(mn, p[i]);
+      }
     }
-    else cout<<-1<<endl;
-    }
+    cout << here + ans << '\n';
+  }
+    
 
 
     return 0;

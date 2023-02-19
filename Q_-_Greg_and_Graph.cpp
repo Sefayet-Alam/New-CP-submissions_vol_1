@@ -82,7 +82,7 @@ template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_ta
 template <typename T,typename R> using ordered_map = tree<T, R , less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 ;
 const double EPS = 1e-9;
-const ll N = 2e5+10;
+const ll N = 2e3+10;
 const ll M = 1e9+7;
 
  
@@ -151,31 +151,55 @@ struct custom_hash {
     }
 };
 
+ll dist[N][N];
+ 
 int main()
 {
     fast;
      ll t;
-    //setIO();
      //ll tno=1;;
      t=1;
-    cin>>t;
-
-    while(t--){
-    ll a,b,c;
-    cin>>a>>b>>c;
-    if(a<c){
-        cout<<1<<" ";
+    //cin>>t;
+   while(t--){
+  ll n;
+  cin>>n;
+  for(ll i=1;i<=n;i++){
+    for(ll j=1;j<=n;j++){
+        cin>>dist[i][j];
     }
-    else{
-        cout<<-1<<" ";
+  }
+  vector<ll>del_oder(n);
+    for(ll i=0;i<n;i++){
+   cin>>del_oder[i];
+  }
+  reverse(del_oder.begin(),del_oder.end());
+  vector<ll>ans;
+  for(ll k=0;k<n;k++){
+    ll k_v=del_oder[k];
+     for(ll i=1;i<=n;i++){
+    for(ll j=1;j<=n;j++){
+       dist[i][j]=min(dist[i][j],dist[i][k_v]+dist[k_v][j]);
+        }
     }
-    if(b*a>c){
-        cout<<b<<endl;
+    ll sum=0;
+    for(ll i=0;i<=k;i++){
+         for(ll j=0;j<=k;j++){
+           sum+=dist[del_oder[i]][del_oder[j]];
+        }
+ 
     }
-    else cout<<-1<<endl;
+    ans.push_back(sum);
+ 
+ 
+ 
+  }
+    reverse(ans.begin(),ans.end());
+   for(auto it:ans){
+        cout<<it<<" ";
     }
-
-
+  cout<<endl;
+   }
     return 0;
 }
+
 

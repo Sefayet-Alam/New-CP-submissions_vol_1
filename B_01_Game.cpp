@@ -161,18 +161,20 @@ int main()
     cin>>t;
 
     while(t--){
-    ll a,b,c;
-    cin>>a>>b>>c;
-    if(a<c){
-        cout<<1<<" ";
+    string s;
+    cin>>s;
+    ll n=s.size();
+    ll z=0,on=0;
+    for(ll i=0;i<n;i++){
+        if(s[i]=='0') z++;
+        else on++;
+    }  
+    ll k=min(z,on);
+    
+    if(k%2==0){
+        cout<<"NET"<<endl;
     }
-    else{
-        cout<<-1<<" ";
-    }
-    if(b*a>c){
-        cout<<b<<endl;
-    }
-    else cout<<-1<<endl;
+    else cout<<"DA"<<endl;
     }
 
 

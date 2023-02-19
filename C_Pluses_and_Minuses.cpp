@@ -161,18 +161,40 @@ int main()
     cin>>t;
 
     while(t--){
-    ll a,b,c;
-    cin>>a>>b>>c;
-    if(a<c){
-        cout<<1<<" ";
+    string s;
+    cin>>s;
+    ll n=s.size();
+
+    vector<ll>pref(n);
+    ll plus=0;
+    ll minus=0;
+    ll ans=0;
+    bool f=0;
+    ll ex=0;
+    for(ll i=0;i<n;i++){
+        if(s[i]=='+'){
+        plus++;
+        if(plus+i>minus) f=0;
+        }
+        else {
+        minus++;
+        if(minus>plus){
+            f=1;
+            //cout<<i<<" "<<i+1<<endl;
+            ans+=i+1;
+            plus=0;
+            minus=0;
+        }
+        
+        }
+     
+     
     }
-    else{
-        cout<<-1<<" ";
-    }
-    if(b*a>c){
-        cout<<b<<endl;
-    }
-    else cout<<-1<<endl;
+    // if(ans==0) ans=n;
+    // if(f){
+    //     ans+=n;
+    // }
+    cout<<ans+n<<endl;
     }
 
 

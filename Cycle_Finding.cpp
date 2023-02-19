@@ -151,6 +151,59 @@ struct custom_hash {
     }
 };
 
+#define INF 1000000009
+vpll g[N];
+ll n,m;
+vl dist(N,INF);
+vl par(N,-1);
+
+void bellman_ford(){
+    ll x=-1;
+    for(ll i=1;i<=n;i++){ dist[i]=INF;par[i]=-1;}
+    dist[1]=0;
+   
+    for(ll i=0; i<n; i++){
+        x=-1;
+        for(ll node=1; node<=n; node++){
+            //if(dist[node]==INF) continue;
+            for(pair<ll,ll> a : g[node]){
+                if(dist[a.first]>dist[node]+a.second){
+                    dist[a.first]=dist[node]+a.second;
+                    par[a.first]=node;
+                    x=a.first;
+                }
+            }
+        }
+        //if(!x) break;
+    }
+    if(x==-1){
+        cout<<"NO"<<endl;
+    }
+    else{
+        //x can be on any cycle or reachable from some cycle
+        vl path;
+        for (ll i=0; i<n; i++) x = par[x];
+        
+        for(ll cur=x; ; cur=par[cur]) {
+            //cout<<cur<<" ";
+            path.push_back (cur);
+            if (cur == x && path.size() > 1) break;
+          
+        }
+        //cout<<endl;
+        reverse(path.begin(), path.end());
+        cout << "YES"<<endl;
+       cout<<path<<endl;
+    }
+
+}
+
+void reset(){
+    for(ll i=1;i<=n+1;i++){
+        g[i].clear();
+       
+    }
+}
 int main()
 {
     fast;
@@ -158,21 +211,23 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    cin>>t;
+    //cin>>t;
 
     while(t--){
-    ll a,b,c;
-    cin>>a>>b>>c;
-    if(a<c){
-        cout<<1<<" ";
-    }
-    else{
-        cout<<-1<<" ";
-    }
-    if(b*a>c){
-        cout<<b<<endl;
-    }
-    else cout<<-1<<endl;
+       
+        cin>>n>>m;
+        ll u,v,w;
+        //cout<<n<<m<<endl;
+        reset();
+        for(ll i=0;i<m;i++){
+            cin>>u>>v>>w;
+            g[u].push_back({v,w});
+        }
+        // for(ll i=1;i<=n;i++){
+        //     cout<<i<<" "<<g[i]<<endl;
+        // }
+        bellman_ford();
+      
     }
 
 

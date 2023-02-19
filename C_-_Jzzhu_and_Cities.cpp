@@ -4,66 +4,49 @@
 using namespace std;
 using namespace __gnu_pbds;
 
-//VVI
-#define fast ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
-#define pb                  push_back
-#define ll                  long long
-#define ff first
-#define ss second
-#define SZ(a) (int)a.size()
-#define UNIQUE(a) (a).erase(unique(all(a)),(a).end())
-#define eb emplace_back
-#define mp make_pair
-
-
-///BIT MANIPULATION
-
+#include<ext/pb_ds/assoc_container.hpp>
+#include<ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+#define nn '\n'
+#define fo(i,n) for(i=0;i<n;i++)
+#define deb(x) cout << #x << "=" << x << endl
+#define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
+#define Setpre(n) cout<<fixed<<setprecision(n)
+#define all(x) x.begin(), x.end()
+#define rev(x) reverse(all(x))
+#define sortall(x) sort(all(x))
+#define mem(a,b) memset(a,b,sizeof(a))
+#define fast_IO ios_base::sync_with_stdio(0), cin.tie(0), cout.tie(0)
 #define Set(x, k) (x |= (1LL << k))
 #define Unset(x, k) (x &= ~(1LL << k))
 #define Check(x, k) (x & (1LL << k))
 #define Toggle(x, k) (x ^ (1LL << k))
-
-//LOOPS
-
+#define ll                  long long
 #define scl(n)              scanf("%lld", &n)
 #define fr(i,n)             for (ll i=0;i<n;i++)
 #define fr1(i,n)            for(ll i=1;i<=n;i++)
-#define Fo(i,k,n) for(i=k;k<n?i<n:i>n;k<n?i+=1:i-=1)
-
-///PRINTING
-
-#define deb(x) cout << #x << "=" << x << endl
-#define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
-#define nn '\n'
 #define pfl(x)              printf("%lld\n",x)
-#define pcas(i)                printf("Case %lld: ",i)
-#define Setpre(n) cout<<fixed<<setprecision(n)
-#define itr(it, a) for(auto it = a.begin(); it != a.end(); it++)
-#define debug               printf("I am here\n")
-
-///SORTING AND FILLING
-
+#define pb                  push_back
 #define asort(a)            sort(a,a+n)
 #define dsort(a)            sort(a,a+n,greater<int>())
 #define vasort(v)         sort(v.begin(), v.end());
 #define vdsort(v)         sort(v.begin(), v.end(),greater<ll>());
-#define rev(x) reverse(all(x))
-#define sortall(x) sort(all(x))
-#define mem(a,b) memset(a,b,sizeof(a))
-#define all(x) x.begin(), x.end()
-#define rev(x) reverse(all(x))
-
-//CONSTANTS
+#define pn                  printf("\n")
 #define md                  10000007
-#define PI 3.1415926535897932384626
-
-
-///INLINE FUNCTIONS
+#define debug               printf("I am here\n")
+#define l(s)                      s.size()
+#define tcas(i,t)             for(ll i=1;i<=t;i++)
+#define pcas(i)                printf("Case %lld: ",i)
+#define fast ios_base::sync_with_stdio(0);cin.tie(0);cout.tie(0);
+#define deb(x) cout << #x << "=" << x << endl
+#define deb2(x, y) cout << #x << "=" << x << "," << #y << "=" << y << endl
+#define Setpre(n) cout<<fixed<<setprecision(n)
 inline ll GCD(ll a, ll b) { return b == 0 ? a : GCD(b, a % b); }
 inline ll LCM(ll a, ll b) { return a * b / GCD(a, b); }
 inline ll Ceil(ll p, ll q)  {return p < 0 ? p / q : p / q + !!(p % q);}
 inline ll Floor(ll p, ll q) {return p > 0 ? p / q : p / q - !!(p % q);}
 inline double logb(ll base,ll num){ return (double)log(num)/(double)log(base);}
+
 inline bool isPerfectSquare(long double x){ if (x >= 0) { long long sr = sqrt(x);return (sr * sr == x); }return false; }
 double euclidean_distance(ll x1,ll y1,ll x2,ll y2){double a=(x2-x1)*(x2-x1);double b=(y2-y1)*(y2-y1);double c=(double)sqrt(a+b);return c;}
 int popcount(ll x){return __builtin_popcountll(x);};
@@ -82,8 +65,8 @@ template <typename T> using ordered_set = tree<T, null_type, less<T>, rb_tree_ta
 template <typename T,typename R> using ordered_map = tree<T, R , less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 ;
 const double EPS = 1e-9;
-const ll N = 2e5+10;
-const ll M = 1e9+7;
+//const ll N = 2e5+10;
+//const ll M = 1e9+7;
 
  
 namespace io{
@@ -151,31 +134,66 @@ struct custom_hash {
     }
 };
 
-int main()
-{
-    fast;
-     ll t;
-    //setIO();
-     //ll tno=1;;
-     t=1;
-    cin>>t;
-
-    while(t--){
-    ll a,b,c;
-    cin>>a>>b>>c;
-    if(a<c){
-        cout<<1<<" ";
+int N,M,K;
+vector<vector<pair<int,int> > > adj;
+int par[100005];
+long long dist[100005];
+long long edge[400005];
+int relaxed[400005];
+ 
+void dijkstra(){
+    priority_queue<pair<long long, int> > q;
+    for(int i=1;i<=N;++i)dist[i] = (long long) 1e16;
+    for(int i=1;i<=N;++i)par[i] = -1;
+    dist[1] = 0;
+    q.push(make_pair(dist[1],1));
+    while(!q.empty()){
+        long long d = -q.top().first;
+        int u = q.top().second;
+        q.pop();
+        if(d > dist[u])continue;
+        for(int i=0;i<adj[u].size();++i){
+            int v = adj[u][i].first;
+            int e = adj[u][i].second;
+            if(dist[v] > d + edge[e]){
+                dist[v] = d + edge[e];
+                par[v] = e;
+                q.push(make_pair(-dist[v],v));
+            } else if(dist[v] == d + edge[e]){
+                if(e < M){
+                    par[v] = e;
+                }
+            }
+        }
     }
-    else{
-        cout<<-1<<" ";
+}
+ 
+int main(){
+    int u,v;
+    long long w;
+    scanf("%d%d%d",&N,&M,&K);
+    adj = vector<vector<pair<int,int> > > (N+3);
+    for(int i=0;i<M;++i){
+        scanf("%d%d%I64d",&u,&v,&w);
+        adj[u].push_back(make_pair(v,i));
+        adj[v].push_back(make_pair(u,i));
+        edge[i] = w;
     }
-    if(b*a>c){
-        cout<<b<<endl;
+    for(int i=0;i<K;++i){
+        scanf("%d%I64d",&v,&w);
+        adj[1].push_back(make_pair(v,i+M));
+        adj[v].push_back(make_pair(1,i+M));
+        edge[i+M] = w;
     }
-    else cout<<-1<<endl;
+    dijkstra();
+    for(int i=1;i<=N;++i){
+        if(par[i]==-1)continue;
+        relaxed[par[i]] = 1;
     }
-
-
+    int ans = 0;
+    for(int i=M;i<M+K;++i){
+        if(!relaxed[i]) ++ans;
+    }
+    printf("%d\n",ans);
     return 0;
 }
-
