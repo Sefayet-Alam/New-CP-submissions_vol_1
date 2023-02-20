@@ -1,0 +1,15 @@
+#include<stdio.h>
+#include <stdlib.h>
+ 
+ 
+int main()
+{
+   int m,n;
+   scanf("%d %d",&m,&n);
+   int i,remainder,ans;
+   remainder=(m*n) % 2;
+   ans=((m*n)-remainder)/2;
+ 
+   printf("%d",ans);
+   return 0;
+}

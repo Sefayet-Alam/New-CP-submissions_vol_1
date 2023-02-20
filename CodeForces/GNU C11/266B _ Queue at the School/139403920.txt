@@ -1,0 +1,22 @@
+#include<stdio.h>
+#include<string.h>
+ 
+int main()
+{
+    int n,t;
+    scanf("%d %d",&n,&t);
+    char s[1000];
+    scanf("%s",s);
+    int i,j,x;
+    for (j=0;j<t;j++)
+    {
+        for (i=0;i<n;i++)
+        {
+            if(s[i]=='B' && s[i+1]=='G') {s[i]='G';
+                                            s[i+1]='B';
+                                            i=i+1;}
+        }
+    }
+    printf("%s",s);
+    return 0;
+}

@@ -1,0 +1,17 @@
+#include<stdio.h>
+#include<math.h>
+ 
+int main()
+{
+  int i,n,k,w,tot=0,b;
+  scanf("%d %d %d",&k,&n,&w);
+  for (i=1;i<=w;i++)
+  {
+      tot=tot+i*k;
+  }
+ 
+  if (tot>n) b=tot-n;
+  else b=0;
+  printf("%d",b);
+    return 0;
+}

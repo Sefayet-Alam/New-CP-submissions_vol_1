@@ -1,0 +1,25 @@
+#include<stdio.h>
+#include<string.h>
+ 
+int main()
+{
+    int i,n,x;
+    int a[1000],b[1000],tot[1000];
+    tot[0]=0;
+    scanf("%d",&n);
+    for (i=1;i<=n;i++)
+    {
+        scanf("%d %d",&a[i],&b[i]);
+    }
+    for (i=1;i<=n;i++)
+    {
+        tot[i]=tot[i-1]+b[i]-a[i];
+    }
+    for (i=1;i<=n;i++)
+    {
+        if (tot[i]<=tot[i-1]) {tot[i]=tot[i-1];
+                                x=tot[i];}
+        
+    }
+   printf("%d",x);
+}
