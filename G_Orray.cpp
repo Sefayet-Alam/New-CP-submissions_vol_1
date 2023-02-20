@@ -150,7 +150,11 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-
+ll maxval;
+bool cmp(ll a,ll b){
+    if((maxval|b) < (maxval|a)){return a<b;}
+    else{return a>b;}
+}
 int main()
 {
     fast;
@@ -161,60 +165,51 @@ int main()
     cin>>t;
 
     while(t--){
-        ll q;
-        cin>>q;
-        ll a1=1;
-        ll a2=1;
-        ll x,n;
-        string p;
-        bool f=0;
-        bool r=0;
-        ll siz1=1;
-        ll siz2=1;
-        while(q--){
-        
-            cin>>x>>n>>p;
-            if(x==1){
-             siz1+=n*p.size();
-             if(r==0){
-                    for(ll i=0;i<p.size();i++){
-                        if(p[i]!='a'){
-                            r=1;
-                            break;
-                        }
-                    }
-                }
-            }
-            else{
-                siz2+=n*p.size();
-                if(f==0){
-                    for(ll i=0;i<p.size();i++){
-                        if(p[i]!='a'){
-                            f=1;
-                            break;
-                        }
-                    }
-                }
-            }
-            //cout<<f<<" "<<r<<endl;
-            if(f){
-                cout<<"YES"<<endl;
-            }
-            else{ 
-               
-                if(r) cout<<"NO"<<endl;
-                else{
-                   if(siz1<siz2) cout<<"YES"<<endl;
-                   else cout<<"NO"<<endl;
-                   }
-              
-            }
+    ll n;
+    cin>>n;
+    vector<ll>vec(n);
+    map<ll,ll>vis;
+    vector<ll>ans;
+    cin>>vec;
+
+    vasort(vec);
+    maxval=vec[n-1];
+    //cout<<vec<<endl;
+
+    vis[n-1]=1;
+    ans.push_back(vec[n-1]);
+    for(ll i=0;i<min(32LL,n-1);i++){
+        //cout<<maxval<<" "<<(maxval|vec[i])<<endl;
+        ll mxm=-1;
+        ll pos=-1;
+       for(ll j=0;j<n;j++){
+        if(vis[j]) continue;
+        if((maxval|vec[j])>mxm){
+            pos=j;
+            mxm=(maxval|vec[j]);
         }
-   }
-//    string a="aaa";
-//    string b="aaaa";
-//    if(a<b) cout<<1<<endl;
-   
+       }
+       maxval=mxm;
+       vis[pos]=1;
+       ans.push_back(vec[pos]);
+    }
+    
+    
+    for(ll i=0;i<n;i++){
+        if(!vis[i]) ans.push_back(vec[i]);
+    }
+    cout<<ans<<endl;
+    //  vector<ll>ans(n);
+    // ans=vec;
+    // vector<ll>pref(n);
+    // pref[0]=ans[0];
+    // for(ll i=1;i<n;i++){
+    //     pref[i]=pref[i-1]|ans[i];
+    // }
+    // cout<<pref<<endl;
+    }
+
+
     return 0;
 }
 

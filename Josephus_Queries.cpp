@@ -150,7 +150,21 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-
+// n = total person
+// will kill every kth person, if k = 2, 2,4,6,...
+// returns the mth killed person
+ll josephus(ll n, ll k, ll m) {
+    m = n - m;
+    if (k <= 1)return n - m;
+    ll i = m;
+    while (i < n) {
+        ll r = (i - m + k - 2) / (k - 1);
+        if ((i + r) > n) r = n - i;
+        else if (!r) r = 1;
+        i += r;
+        m = (m + (r * k)) % i;
+    } return m + 1;
+}
 int main()
 {
     fast;
@@ -161,60 +175,13 @@ int main()
     cin>>t;
 
     while(t--){
-        ll q;
-        cin>>q;
-        ll a1=1;
-        ll a2=1;
-        ll x,n;
-        string p;
-        bool f=0;
-        bool r=0;
-        ll siz1=1;
-        ll siz2=1;
-        while(q--){
-        
-            cin>>x>>n>>p;
-            if(x==1){
-             siz1+=n*p.size();
-             if(r==0){
-                    for(ll i=0;i<p.size();i++){
-                        if(p[i]!='a'){
-                            r=1;
-                            break;
-                        }
-                    }
-                }
-            }
-            else{
-                siz2+=n*p.size();
-                if(f==0){
-                    for(ll i=0;i<p.size();i++){
-                        if(p[i]!='a'){
-                            f=1;
-                            break;
-                        }
-                    }
-                }
-            }
-            //cout<<f<<" "<<r<<endl;
-            if(f){
-                cout<<"YES"<<endl;
-            }
-            else{ 
-               
-                if(r) cout<<"NO"<<endl;
-                else{
-                   if(siz1<siz2) cout<<"YES"<<endl;
-                   else cout<<"NO"<<endl;
-                   }
-              
-            }
-        }
-   }
-//    string a="aaa";
-//    string b="aaaa";
-//    if(a<b) cout<<1<<endl;
-   
+    ll n,k;
+    cin>>n>>k;
+    ll ans=josephus(n,2,k);
+    cout<<ans<<endl;     
+    }
+
+
     return 0;
 }
 

@@ -13,7 +13,7 @@ using namespace __gnu_pbds;
 #define SZ(a) (int)a.size()
 #define UNIQUE(a) (a).erase(unique(all(a)),(a).end())
 #define eb emplace_back
-#define mp make_pair
+
 
 
 ///BIT MANIPULATION
@@ -161,60 +161,34 @@ int main()
     cin>>t;
 
     while(t--){
-        ll q;
-        cin>>q;
-        ll a1=1;
-        ll a2=1;
-        ll x,n;
-        string p;
-        bool f=0;
-        bool r=0;
-        ll siz1=1;
-        ll siz2=1;
-        while(q--){
+        ll n;
+        cin>>n;
         
-            cin>>x>>n>>p;
-            if(x==1){
-             siz1+=n*p.size();
-             if(r==0){
-                    for(ll i=0;i<p.size();i++){
-                        if(p[i]!='a'){
-                            r=1;
-                            break;
-                        }
-                    }
-                }
+        vector<vector<string> >vec;
+        map<string,ll>mp;
+        string p;
+        for(ll i=0;i<3;i++){
+                vector<string> v;
+            for(ll j=0;j<n;j++){
+                cin>>p;
+                mp[p]++;
+                v.push_back(p);
             }
-            else{
-                siz2+=n*p.size();
-                if(f==0){
-                    for(ll i=0;i<p.size();i++){
-                        if(p[i]!='a'){
-                            f=1;
-                            break;
-                        }
-                    }
-                }
-            }
-            //cout<<f<<" "<<r<<endl;
-            if(f){
-                cout<<"YES"<<endl;
-            }
-            else{ 
-               
-                if(r) cout<<"NO"<<endl;
-                else{
-                   if(siz1<siz2) cout<<"YES"<<endl;
-                   else cout<<"NO"<<endl;
-                   }
-              
-            }
+             vec.push_back(v);
         }
-   }
-//    string a="aaa";
-//    string b="aaaa";
-//    if(a<b) cout<<1<<endl;
-   
+        vector<ll>ans(3,0);
+        for(ll i=0;i<3;i++){
+            for(ll j=0;j<n;j++){
+              if(mp[vec[i][j]]==1){ans[i]+=3;}
+              else if(mp[vec[i][j]]==2){ans[i]+=1;}
+            }
+            //cout<<endl;
+        }
+        cout<<ans<<endl;
+      
+    }
+
+
     return 0;
 }
 
