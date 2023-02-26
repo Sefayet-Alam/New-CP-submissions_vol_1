@@ -150,7 +150,17 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-
+ll n,c,d;
+ll sumf(vector<ll>&vec,ll n,ll mid){
+    ll sum=0;
+    for (int i = 0; i < d; i++) {
+        int id = i % (mid + 1);
+        if (id < n) {
+          sum += vec[id];
+        }
+      }
+      return sum;
+}
 int main()
 {
     fast;
@@ -158,9 +168,36 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
+      
+      cin>>n>>c>>d;
+      vector<ll>vec(n);
+      cin>>vec;
+      bool f=0;
+      sort(vec.rbegin(),vec.rend());
+     
+        ll l=-1;
+        ll r=d+1;
+        ll mid;
+        while(l<r){
+             mid=(l+r+1)/2;
+            if(sumf(vec,n,mid)>=c){
+                l=mid;
+            } 
+            else r=mid-1;
+        }
+
+        if(l==d+1) cout<<"Infinity"<<endl;
+        else{
+            if(l==-1){
+                cout<<"Impossible"<<endl;
+            }
+            else{
+                cout<<l<<endl;
+            }
+        }
       
     }
 

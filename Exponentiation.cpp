@@ -152,6 +152,18 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
+ll power(ll a,ll b,ll mod)
+{   int res = 1;   
+    a=a%mod; 
+    if (a==0) return 0; 
+    while (b>0)
+    {
+        if (b&1) res=(res*a)%mod;
+        b /=2;
+        a=(a*a)%mod;
+    }
+    return res;
+}
 
 int main()
 {
@@ -160,10 +172,18 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-      
+        ll a,b;
+        cin>>a>>b;
+        if(a==0 && b==0) cout<<1<<endl;
+        else if(a==0)cout<<0<<endl;
+        else{
+        ll ans=power(a,b,M);
+        cout<<ans<<endl;
+        }
+
     }
 
 
