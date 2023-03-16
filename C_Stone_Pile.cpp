@@ -152,20 +152,7 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-ll ans;
-ll n;
-vector<ll>vec(N);
-void func(ll i,ll suma,ll sumb){
-    if(i>=n){
-      ans=min(ans,abs(suma-sumb));
-      return;
-    }
-    
-    
-    func(i+1,suma+vec[i],sumb);
-    func(i+1,suma,sumb+vec[i]);
-   
-}
+
 int main()
 {
     fast;
@@ -176,15 +163,21 @@ int main()
     //cin>>t;
 
     while(t--){
-     
+       ll n;
         cin>>n;
-       ans=INT_MAX;
-       for(ll i=0;i<n;i++){
-        cin>>vec[i];
-       }
+        vector<ll>vec(n);
        
-      func(0,0,0);
-     cout<<ans<<endl;
+       cin>>vec;
+       ll sum=accumulate(vec.begin(),vec.end(),0);
+       ll ans=sum;
+       for(ll mask=0;mask<(1<<n);mask++){
+        ll k=0;
+         for (ll j=0;j<n;++j) {
+            if((1<<j)&mask) k+=vec[j];
+        }
+        ans=min(ans,abs(sum-2*k));
+       }
+      cout<<ans<<endl;
     }
 
 

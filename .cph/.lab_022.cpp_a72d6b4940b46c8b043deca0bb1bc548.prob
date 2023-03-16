@@ -1,0 +1,1 @@
+{"name":"Local: lab_022","url":"c:\\Users\\ASUS\\OneDrive\\Documents\\GitHub\\New-CP-submissions\\lab_022.cpp","tests":[{"id":1678851973429,"input":"p a (p o q)\nn p a (n q b p)","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\ASUS\\OneDrive\\Documents\\GitHub\\New-CP-submissions\\lab_022.cpp","group":"local","local":true}

@@ -117,30 +117,37 @@ int main()
         ll n;
         cin>>n;
         vector<ll>vec(n);
+        ll pos=0,neg=0;
         cin>>vec;
-      
         sort(vec.begin(),vec.end());
-        ll ans2=1;
-        ll maxm=INT_MIN;
-        vector<ll>ans;
-        for(ll i=0;i<5;i++){
-            ans2=1;
-            for(ll j=0;j<5-i;j++){
-               cout<<vec[j]<<" ";
-                ans2*=vec[j];
-            }
-            for(ll j=n-1;j>n-1-i;j--){
-                cout<<vec[j]<<" ";
-                ans2*=vec[j];
-            }
-           cout<<ans2<<endl;
-
-             maxm=max(maxm,ans2);
-          vec.push_back(ans2);
+        ll ans1=1,ans2=1,ans3=1,ans4=1,ans5=1,ans6=1;
+        for(ll i=n-1;i>=n-5;i--){
+            ans1*=vec[i];
         }
-       
-      
-       cout<<maxm<<endl;
+        for(ll i=0;i<4;i++){
+            ans2*=vec[i];
+        }
+        ans2*=vec[n-1];
+        for(ll i=0;i<3;i++){
+            ans3*=vec[i];
+        }
+        ans3*=(vec[n-1])*(vec[n-2]);
+         for(ll i=0;i<2;i++){
+            ans4*=vec[i];
+        }
+         ans4*=vec[n-1]*vec[n-2]*vec[n-3];
+          for(ll i=n-1;i>=n-4;i--){
+            ans5*=vec[i];
+        }
+        ans5*=vec[0];
+        for(ll i=0;i<5;i++){
+            ans6*=vec[i];
+        }
+       // cout<<ans1<<" "<<ans2<<" "<<ans3<<" "<<ans4<<" "<<ans5<<" "<<ans6<<endl;
+        ll ans=max(ans1,max(ans2,max(ans3,max(ans4,max(ans5,ans6)))));
+        cout<<ans<<endl;
+        
+        
 
     }
 
