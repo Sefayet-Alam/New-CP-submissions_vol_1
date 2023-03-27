@@ -291,7 +291,6 @@ struct custom_hash
 ll p, q;
 ll no;
 
-
 int main()
 {
     fast;

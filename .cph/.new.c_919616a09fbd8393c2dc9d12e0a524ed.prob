@@ -1,0 +1,1 @@
+{"name":"Local: new","url":"c:\\Users\\ASUS\\OneDrive\\Documents\\GitHub\\New-CP-submissions\\new.c","tests":[{"id":1679826415299,"input":"6\nabcmnb\n5\na\nb\nc\nd\ne","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\ASUS\\OneDrive\\Documents\\GitHub\\New-CP-submissions\\new.c","group":"local","local":true}
