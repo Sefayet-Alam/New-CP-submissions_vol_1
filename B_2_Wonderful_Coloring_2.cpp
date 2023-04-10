@@ -152,7 +152,10 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-
+ vector<ll>vec(N);
+bool cmp(ll i,ll j){
+    return vec[i]<vec[j];
+};
 int main()
 {
     fast;
@@ -160,13 +163,35 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-      
+    ll n,k;
+    cin>>n>>k;
+   vec.resize(n);
+   map<ll,ll>freq;
+   vector<ll>pos;
+   ll x;
+   for(ll i=0;i<n;i++){
+    cin>>vec[i];
+    //vec[i]--;
+    freq[vec[i]]++;
+    if(freq[vec[i]]<=k)pos.push_back(i);
+   }
+    while((pos.size())%k!=0){
+        pos.pop_back();
     }
+    sort(all(pos),cmp);
+    vector<ll>ans(n);
+    for(ll i=0;i<pos.size();i++){
+        ans[pos[i]]=i%k+1;
+    }
+   
+   cout<<ans<<endl;
+   }
+
+    
 
 
     return 0;
 }
-
