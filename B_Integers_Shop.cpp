@@ -160,10 +160,66 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-      
+      ll n;
+      cin>>n;
+      ll l,r,w;
+      ll totl=0,totr=0;
+      ll currl=INT_MAX;
+      ll currr=-1;
+      ll tot=0;
+      for(ll i=0;i<n;i++){
+        cin>>l>>r>>w; 
+       if(l==currl && r==currr){
+        totl=min(totl,w);
+        totr=min(totr,w);
+        tot=min(tot,w);
+       }
+        else if(l==currl && r<currr){
+            totl=min(w,totl);
+            tot=min(tot,totl+totr);
+        }
+        else if(l==currl && r>currr){
+             currr=max(r,currr);
+             totl=min(w,totl);
+             totr=w;
+             tot=w;
+        }
+        else if(r==currr && l>currl){
+            totr=min(w,totr);
+            tot=min(tot,totr+totl);
+        }
+        else if(r==currr && l<currl){
+            currl=min(l,currl);
+            totr=min(w,totr);
+            totl=w;
+            tot=w;
+        }
+        else if(l<currl && r>currr){
+            currl=min(l,currl);
+            currr=max(r,currr);
+            totl=w;
+            totr=w;
+            tot=w;
+        }
+        else if(l<currl || r>currr){ 
+            if(l<currl){
+            currl=min(l,currl);
+            totl=w;
+            tot=totl+totr;
+            }
+            if(r>currr){
+                currr=max(r,currr);
+                totr=w;
+                tot=totl+totr;
+            }
+        
+        }
+        //  cout<<currl<<" "<<currr<<" "<<totl<<" "<<totr<<nn;
+        cout<<tot<<nn;
+      }
     }
 
 
