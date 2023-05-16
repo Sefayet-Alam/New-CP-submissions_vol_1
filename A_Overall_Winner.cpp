@@ -163,20 +163,23 @@ int main()
     //cin>>t;
 
     while(t--){
-      ll ans=0;
-      string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
-      for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
-      }
-      cout<<ans<<nn;
+        ll n;
+        string s;
+        cin>>n>>s;
+        ll th=0,as=0;
+        for(ll i=0;i<n;i++){
+            if(s[i]=='T') th++;
+            else as++;
+        }
+        if(th>as){cout<<"T"<<nn;}
+        else if((as>th)){
+            cout<<"A"<<nn;
+        }
+        else{
+            if(s[n-1]=='T') cout<<"A"<<nn;
+            else cout<<"T"<<nn;
+        }
+      
     }
 
 

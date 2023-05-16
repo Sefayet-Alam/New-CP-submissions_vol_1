@@ -160,23 +160,42 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-      ll ans=0;
-      string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
+      ll n;
+      cin>>n;
+    
+      vector<pair<ll,ll>>pairs(n);
       for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
+        cin>>pairs[i].first;
+        pairs[i].second=i+1;
       }
-      cout<<ans<<nn;
+      priority_queue<pair<ll,ll>>pq;
+      for(auto it:pairs){
+        if(it.first) pq.push(it);
+      }
+    //   for(auto it:pairs){
+    //     cout<<it<<nn;
+    //   }
+    ll l,r;
+    vpll answers;
+    while(pq.size()>1){
+        auto  l=pq.top();
+        pq.pop();
+        auto  r=pq.top();
+        pq.pop();
+        answers.push_back({l.second,r.second});
+        l.first--;
+        r.first--;
+        if(l.first){pq.push(l);}
+        if(r.first){pq.push(r);}
+    }
+    cout<<answers.size()<<nn;
+    for(auto it:answers){
+        cout<<it<<nn;
+    }
+
     }
 
 

@@ -160,23 +160,38 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-      ll ans=0;
-      string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
-      for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
-      }
-      cout<<ans<<nn;
+      ll n,k;
+      cin>>n>>k;
+    vector<ll>vec(n);
+    cin>>vec;
+    sort(all(vec));
+    vector<ll>pref(n),suff(n);
+    pref[0]=vec[0];
+    suff[n-1]=vec[n-1];
+    for(ll i=1;i<n;i++){
+        pref[i]=pref[i-1]+vec[i];
+    }
+    for(ll i=n-2;i>=0;i--){
+        suff[i]=suff[i+1]+vec[i];
+    }
+    // cout<<suff<<nn;
+    ll tot=pref[n-1];
+    ll k2=k;
+    // cout<<vec<<nn;
+    ll sum=0,ans=0;
+    for(ll i=0;i<=k;i++){
+        // cout<<i*2-1<<" "<<k<<" "<<n-(k-i)<<nn;
+        // cout<<tot<<" "<<pref[i*2-1]<<" "<<suff[n-(k-i)]<<nn;
+        ans=tot;
+        if(i*2-1>=0) ans-=pref[i*2-1];
+        if(n-(k-i)>=0 && n-(k-i)<n) ans-=suff[n-(k-i)];
+        // cout<<ans<<nn;
+        sum=max(sum,ans);
+    }
+    cout<<sum<<nn;
     }
 
 

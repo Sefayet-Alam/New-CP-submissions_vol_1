@@ -153,6 +153,8 @@ struct custom_hash {
     }
 };
 
+
+
 int main()
 {
     fast;
@@ -160,26 +162,41 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-      ll ans=0;
-      string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
+      ll n;
+      cin>>n;
+      vector<pair<ll,ll>>vec(n);
       for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
+        cin>>vec[i].first;
+        vec[i].second=i+1;
       }
+      sort(all(vec));
+      vector<ll>pref(n);
+      pref[0]=vec[0].first;
+      for(ll i=1;i<n;i++){
+        pref[i]=pref[i-1]+vec[i].first;
+      }
+      for(ll i=n-2;i>=0;i--){
+        if(vec[i].first==vec[i+1].first){
+          pref[i]=pref[i+1];
+        }
+      }
+      // cout<<pref<<nn;
+      vector<ll>ans;
+      ans.push_back(vec[n-1].second);
+      for(ll i=n-2;i>=0;i--){
+        if(pref[i]>=vec[i+1].first){
+          ans.push_back(vec[i].second);
+        }
+        else break;
+      }
+      sort(all(ans));
+      cout<<ans.size()<<nn;
       cout<<ans<<nn;
+
     }
-
-
     return 0;
 }
 

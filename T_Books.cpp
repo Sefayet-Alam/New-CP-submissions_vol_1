@@ -160,23 +160,36 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    // cin>>t;
 
     while(t--){
-      ll ans=0;
-      string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
-      for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
-      }
-      cout<<ans<<nn;
+        ll n,k;
+        cin>>n>>k;
+        vector<ll>vec(n);
+        cin>>vec;
+        ll maxm=0;
+        ll l=0,r=0;
+        ll curr=vec[r];
+        while(r<n){
+            if(curr<=k){
+                maxm=max(maxm,r-l+1);
+            }
+
+            if(l==r){
+                r++;
+                curr+=vec[r];
+            }
+            else if(curr>k){
+                curr-=vec[l];
+                l++;
+            }
+            else{
+                r++;
+                curr+=vec[r];
+            }
+            
+        }
+        cout<<maxm<<nn;
     }
 
 

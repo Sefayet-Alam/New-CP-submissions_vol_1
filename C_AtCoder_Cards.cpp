@@ -163,20 +163,40 @@ int main()
     //cin>>t;
 
     while(t--){
-      ll ans=0;
-      string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
-      for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
-      }
-      cout<<ans<<nn;
+     string a,b;
+     cin>>a>>b;
+     ll n=a.size();
+     map<char,ll>mp1,mp2;
+     for(ll i=0;i<n;i++){
+        mp1[a[i]]++;
+     }
+     for(ll i=0;i<n;i++){
+        mp2[b[i]]++;
+     }
+     ll tot1=0,tot2=0;
+     bool f=0;
+     for(auto it:mp2){
+        if(it.first!='@'){
+         if(it.second>=mp1[it.first]){
+            tot1+=it.second-mp1[it.first];
+         }
+         else{
+            tot2+=mp1[it.first]-it.second;
+         }
+        }
+     }
+     for(ll i='a';i<='z';i++){
+        if(i=='a' || i=='t' || i=='c' || i=='o' ||i=='d' || i=='e' || i=='r') continue;
+        else if(mp1[i]!=mp2[i]){
+            f=1;
+            break;
+        }
+     }
+     if(f) cout<<"No"<<nn;
+     else if(tot1<=mp1['@'] && tot2<=mp2['@']){
+        cout<<"Yes"<<nn;
+     }
+     else cout<<"No"<<nn;
     }
 
 

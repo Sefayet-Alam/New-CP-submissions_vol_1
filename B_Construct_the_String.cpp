@@ -160,23 +160,34 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-      ll ans=0;
-      string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
-      for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
+      ll n,a,b;
+      cin>>n>>a>>b;
+      char ch='a';
+      string s="";
+      for(ll i=1;i<=n;i++){
+        s+=(char)ch;
+        ch=ch+1;
+        if(i%26==0){ch='a';}
       }
-      cout<<ans<<nn;
+      if(a==b){
+        cout<<s<<nn;
+        continue;
+      }
+      ch='a';
+      ll sz=b;
+     
+      for(ll i=b;i<n;i++){
+        if(i%sz==b%sz){
+            ch='a';
+        }
+        // cout<<i%sz<<" "<<b%sz<<" "<<ch<<nn;
+        s[i]=ch;
+        ch=ch+1;
+      }
+      cout<<s<<nn;
     }
 
 

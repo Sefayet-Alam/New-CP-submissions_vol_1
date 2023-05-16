@@ -152,7 +152,21 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-
+ ll u,v,n;
+vector<pll>g[N];
+ vector<ll>ans(N);
+void dfs(ll vertex,ll par,ll val){
+  
+    for(auto child: g[vertex]){
+        
+        if(child.first==par) continue;
+        ans[child.second]=val;
+        val=13-val;
+        dfs(child.first,vertex,val);
+        
+    }
+   
+}
 int main()
 {
     fast;
@@ -160,23 +174,31 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-      ll ans=0;
-      string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
-      for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
-      }
-      cout<<ans<<nn;
+       
+        cin>>n;
+        for(ll i=0;i<n-1;i++){
+            cin>>u>>v;
+            g[u].push_back({v,i});
+            g[v].push_back({u,i});
+        }
+        ll leaf=1;
+        bool f=0;
+        for(ll i=1;i<=n;i++){
+            if(g[i].size()>2){f=1;break;}
+            else if(g[i].size()==1){leaf=i;}
+        }
+
+        if(f){cout<<-1<<nn;}
+        else{
+        ans.resize(n-1);
+        dfs(leaf,-1,2);
+        cout<<ans<<nn;
+        }
+
+       for(int i=0;i<=n;i++){g[i].clear();}
     }
 
 

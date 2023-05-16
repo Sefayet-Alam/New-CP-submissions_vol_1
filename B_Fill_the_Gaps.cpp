@@ -163,20 +163,27 @@ int main()
     //cin>>t;
 
     while(t--){
-      ll ans=0;
-      string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
-      for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
+      ll n;
+      cin>>n;
+      vector<ll>vec(n);
+      cin>>vec;
+      for(ll i=0;i<n-1;i++){
+        if(vec[i]==vec[i+1]){
+            cout<<vec[i]<<" ";
+            continue;
+        }
+        if(vec[i+1]<vec[i]){
+            for(ll j=vec[i];j>vec[i+1];j--){
+                cout<<j<<" ";
+            }
+        }
+        else{
+             for(ll j=vec[i];j<vec[i+1];j++){
+                cout<<j<<" ";
+            }
+        }
       }
-      cout<<ans<<nn;
+      cout<<vec[n-1]<<nn;
     }
 
 

@@ -152,6 +152,67 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
+ll n,q,cnt;
+ll par[N];
+ll sz[N];
+multiset<int> sizes;
+stack<pair<ll,ll>>history;
+
+void make(ll v){
+    par[v]=v;
+    sz[v]=1;
+    // sizes.insert(1);
+}
+
+int find(ll v){
+    if(par[v]==v) return v;
+    return find(par[v]);
+}
+
+void merge(ll a,ll b){
+    sizes.erase(sizes.find(sz[a]));
+    sizes.erase(sizes.find(sz[b]));
+    sizes.insert(sz[a]+sz[b]);
+}
+
+void Union(ll a,ll b){
+    a=find(a);
+    b=find(b);
+    if(a!=b){
+        if(sz[a]<sz[b]) swap(a,b);
+
+        history.emplace(a,par[a]);
+        history.emplace(b,par[b]);
+       
+        // merge(a,b);
+        sz[a]+=sz[b];
+        par[b]=a;
+        cnt-=2;
+    }
+}
+void Persist() {
+    history.emplace(-1, -1);
+}
+ll getCNT(){
+    return cnt/2;
+}
+void Rollback() {
+    while (!history.empty()) {
+        auto it=history.top();
+        history.pop();
+        if(it.first==-1 && it.second==-1){
+         break;
+        }
+        par[it.first]=it.second;
+        ++cnt;
+    }
+}
+void init(ll n){
+    cnt=2*n;
+    for(ll i=0;i<=n;i++){
+        make(i);
+    }
+}   
 
 int main()
 {
@@ -163,23 +224,28 @@ int main()
     //cin>>t;
 
     while(t--){
-      ll ans=0;
+      cin>>n>>q;
       string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
-      for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
+      ll l,r;
+      init(n);
+      while(q--){
+        cin>>s;
+        if(s=="persist"){
+            Persist();
+        }
+        else if(s=="union"){
+            cin>>l>>r;
+            l--,r--;
+            Union(l,r);
+            cout<<getCNT()<<nn;
+        }
+        else{
+            Rollback();
+            cout<<getCNT()<<nn;
+        }
       }
-      cout<<ans<<nn;
     }
 
 
     return 0;
 }
-

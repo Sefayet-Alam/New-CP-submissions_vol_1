@@ -152,7 +152,9 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-
+bool cmp(vector<ll> a,vector<ll> b){
+    return a.size()<b.size();
+}
 int main()
 {
     fast;
@@ -160,26 +162,42 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-      ll ans=0;
-      string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
+      ll q;
+      cin>>q;
       ll curr=0;
-      for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
+       ll n,x;
+      vector<pair<ll,ll>>answers;
+      while(q--){
+        cin>>n;
+        curr=0;
+        ll pos;
+        for(ll i=0;i<n;i++){
+            cin>>x;
+            // curr=max(curr,x+1-i);
+            if(x+1-i>curr){
+                curr=x+1-i;
+             
+            }
+        }
+        answers.push_back({curr,n});
       }
-      cout<<ans<<nn;
+    
+      sort(all(answers));
+        // cout<<answers<<nn;
+      ll ans=0;
+      ll last=0;
+      for(ll i=0;i<answers.size();i++){
+        if(answers[i].first-last>ans){
+            ans=answers[i].first-last;
+        }
+        last+=answers[i].second;
+       
+      }
+      cout<<ans<<nn;   
     }
-
-
     return 0;
 }
 

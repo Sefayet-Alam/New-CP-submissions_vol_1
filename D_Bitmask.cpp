@@ -163,23 +163,42 @@ int main()
     //cin>>t;
 
     while(t--){
-      ll ans=0;
       string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
+      ll n;
+      cin>>s>>n;
+      ll sz=s.size();
       ll curr=0;
-      for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
+      ll toadd=1;
+      if(sz==1){
+        if(s[0]=='1'){
+            cout<<1<<nn;
+        }
+        else if(s[0]=='0'){
+            cout<<0<<nn;
+        }
+        else cout<<1<<nn;
+        continue;
       }
-      cout<<ans<<nn;
+      for(ll i=sz-1;i>=0;i--){
+        if(s[i]=='0'){}
+        else if(s[i]=='1'){curr+=toadd;}
+        toadd*=2;
+      }
+     if(curr>n){cout<<-1<<nn;continue;;}
+      ll g=0;
+      for(ll i=0;i<sz;i++){
+        toadd/=2;
+        if(s[i]=='?'){
+        if(curr+toadd<=n){
+            curr+=toadd;
+        }
+        }
+        
+      }
+    
+      cout<<curr<<nn;
     }
 
 
     return 0;
 }
-

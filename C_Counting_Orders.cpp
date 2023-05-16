@@ -160,23 +160,24 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-      ll ans=0;
-      string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
+      ll n;
+      cin>>n;
+      vector<ll>a(n),b(n);
+      cin>>a>>b;
+      ll ans=1;
+      sort(all(a));
+      sort(all(b));
+       ll k=0;
       for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
+        if(a[i]>b[n-1]){k=n;}
+        else{k=lower_bound(all(b),a[i])-b.begin();}
+        // cout<<k<<" "<<cnt<<nn;
+        ans=(ans*max(0LL,(k-i)))%M;
       }
-      cout<<ans<<nn;
+      cout<<(ans%M)<<nn;
     }
 
 

@@ -57,7 +57,7 @@ using namespace __gnu_pbds;
 #define md                  10000007
 #define PI 3.1415926535897932384626
 const double EPS = 1e-9;
-const ll N = 2e5+10;
+const ll N = 3e6+10;
 const ll M = 1e9+7;
 
 
@@ -153,6 +153,25 @@ struct custom_hash {
     }
 };
 
+
+vector<bool> Primes(N,1);
+vector<ll>primenos;
+void SieveOfEratosthenes(ll n)
+{
+    Primes[1]=0;
+    for (ll i=2;i*i<=n;i++) {
+    if(Primes[i]==1){     
+    for(ll j=i*i;j<=n;j+=i)
+        Primes[j]=0;
+        }
+    }
+    for(ll i=1;i<n;i++){
+        if(Primes[i]){
+            primenos.push_back(i);
+        }
+    }
+}
+
 int main()
 {
     fast;
@@ -160,26 +179,53 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
-
+    cin>>t;
+    SieveOfEratosthenes(N);
     while(t--){
-      ll ans=0;
-      string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
-      for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
+      ll p,q;
+      cin>>p>>q;
+      if(p%q){
+        cout<<p<<nn;
       }
-      cout<<ans<<nn;
+      else{
+
+        map<ll,ll>freq1,freq2;
+        ll p1=p,q1=q;
+        // for(auto it:primenos){
+        //     if(it>p1) break;
+        //     while(p1%it==0){
+        //         p1/=it;
+        //         freq1[it]++;
+        //     }
+        // }
+        // if(p1>1) freq1[p1]++;
+
+         for(auto it:primenos){
+            if(it>q1) break;
+            while(q1%it==0){
+                q1/=it;
+                freq2[it]++;
+            }
+        }
+        if(q1>1) freq2[q1]++;
+
+        ll ans=1;
+        ll k,g;
+        for(auto it:freq2){
+            // cout<<it<<nn;
+            k=p;
+            g=it.second;
+            while(k%it.first==0){
+                k/=it.first;
+                if(k%q){ans=max(ans,k);break;};
+            }
+
+        }
+        cout<<ans<<nn;
+      }
+
     }
 
 
     return 0;
 }
-

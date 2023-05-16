@@ -160,23 +160,27 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-      ll ans=0;
-      string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
+      ll n;
+      cin>>n;
+      vector<ll>vec(n);
+      cin>>vec;
+      ll ans=1;
+      vector<ll>diffs;
       for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
+        if(vec[i]==i+1) continue;
+        else{
+            diffs.push_back(abs(vec[i]-(i+1)));
+        }
       }
-      cout<<ans<<nn;
+      if(diffs.size()==0){cout<<vec<<nn; continue;}
+      ll gcd=diffs[0];
+      for(ll i=0;i<diffs.size();i++){
+        gcd=GCD(gcd,diffs[i]);
+      }
+      cout<<gcd<<nn;
     }
 
 

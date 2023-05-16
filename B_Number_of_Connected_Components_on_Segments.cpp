@@ -152,34 +152,138 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
+ll n,m,q,cnt;
+ll par[N];
+ll sz[N];
+multiset<int> sizes;
+stack<pair<ll,ll>>history;
+vector<pair<ll,ll>>edges(N);
+
+void make(ll v){
+    par[v]=v;
+    sz[v]=1;
+    // sizes.insert(1);
+}
+
+int find(ll v){
+    if(par[v]==v) return v;
+    return find(par[v]);
+}
+
+void merge(ll a,ll b){
+    sizes.erase(sizes.find(sz[a]));
+    sizes.erase(sizes.find(sz[b]));
+    sizes.insert(sz[a]+sz[b]);
+}
+
+void Union(ll a,ll b){
+    a=find(a);
+    b=find(b);
+    if(a!=b){
+        if(sz[a]<sz[b]) swap(a,b);
+
+        history.push({a,par[a]});
+        history.push({b,par[b]});
+       
+        // merge(a,b);
+        sz[a]+=sz[b];
+        par[b]=a;
+        cnt-=2;
+    }
+}
+
+void Persist() {
+    history.push({-1, -1});
+}
+ll getCNT(){
+    return cnt/2;
+}
+void Rollback() {
+    while (!history.empty()) {
+        auto it=history.top();
+        history.pop();
+        if(it.first==-1 && it.second==-1){
+         break;
+        }
+        par[it.first]=it.second;
+        ++cnt;
+    }
+}
+
+void init(ll n){
+    cnt=2*n;
+    for(ll i=0;i<=n;i++){
+        make(i);
+    }
+}   
+
+
+//set N=30005 if TLE
+
+
+struct query{
+    ll l, r, ind;
+    ll k;
+}qs[200005];
+
+ll ans[200005];
+ll bucket;
+
 
 int main()
 {
     fast;
-     ll t;
-    //setIO();
-     //ll tno=1;;
-     t=1;
-    //cin>>t;
-
-    while(t--){
-      ll ans=0;
-      string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
-      for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
-      }
-      cout<<ans<<nn;
+    cin>>n>>m;
+    init(n);
+    edges.resize(m);
+    bucket=max(int(sqrt(m)),1);
+    ll i;
+    fr(i,m){
+        cin>>edges[i].first>>edges[i].second;
     }
-
-
+    cin>>q;
+    fr(i,q){
+        cin>>qs[i].l>>qs[i].r, qs[i].ind=i; 
+        qs[i].l--;
+        qs[i].r--;
+    }
+    sort(qs,qs+q,[](query a, query b){
+        if(a.l/bucket!=b.l/bucket) return a.l<b.l;
+        return a.r<b.r;
+    });
+    // int l=0, r=0;
+    ll l=-1,r=-1;
+    ll lob,hib;
+    for(ll i=0;i<q;i++){
+     lob=qs[i].l/bucket,hib=qs[i].r/bucket;
+      if(lob!=l){
+        init(n);
+        r=(lob+1)*bucket-1;
+      }
+       l=lob;
+       if(lob==hib){
+        Persist();
+        for(ll j=qs[i].l;j<=qs[i].r;j++){
+            Union(edges[j].first,edges[j].second);
+        }
+        ans[qs[i].ind]=getCNT();
+        Rollback();
+       }
+       else{
+        while(r<qs[i].r){
+            r++;
+            Union(edges[r].first, edges[r].second);
+        }
+        Persist();
+        for (ll j=qs[i].l;j<(lob+1)*bucket;j++) {
+            Union(edges[j].first,edges[j].second);
+        }
+        ans[qs[i].ind]=getCNT();
+        Rollback();
+       }
+    }
+    for(ll i=0;i<q;i++){
+        cout<<ans[i]<<nn;
+    }
     return 0;
 }
-

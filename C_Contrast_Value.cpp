@@ -57,7 +57,7 @@ using namespace __gnu_pbds;
 #define md                  10000007
 #define PI 3.1415926535897932384626
 const double EPS = 1e-9;
-const ll N = 2e5+10;
+const ll N = 3e5+10;
 const ll M = 1e9+7;
 
 
@@ -152,6 +152,8 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
+ll n,k;
+vector<ll>a(N);
 
 int main()
 {
@@ -160,23 +162,34 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-      ll ans=0;
-      string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
+      cin>>n;
+      a.resize(n);
+      cin>>a;
+      k=0;
+      set<ll>st;
       for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
+        st.insert(a[i]);
+      }
+      if(n==1){k=0;}
+      else{
+        for(ll i=0;i<n-1;i++){
+            k+=abs(a[i]-a[i+1]);
+        }
+      }
+      if(k==0){
+        cout<<1<<nn;
+        continue;
+      }
+      ll ans=0;
+      ll m=unique(all(a))-a.begin();
+      for(ll i=0;i<m;i++){
+        if((i==0 || a[i]>a[i-1])&&(i==m-1 || a[i]>a[i+1])||((i==0 || a[i]<a[i-1]) && (i==m-1 || a[i]<a[i+1]))) ans++;
       }
       cout<<ans<<nn;
+      
     }
 
 

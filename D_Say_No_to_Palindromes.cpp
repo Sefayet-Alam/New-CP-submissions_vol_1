@@ -153,6 +153,7 @@ struct custom_hash {
     }
 };
 
+string str[10]={"abc","acb","bca","bac","cab","cba"};
 int main()
 {
     fast;
@@ -163,34 +164,24 @@ int main()
     // cin>>t;
 
     while(t--){
-      ll n,q;
-      cin>>n>>q;
-      string s;
-      cin>>s;
-      vector<ll>currans(n+1);
-      ll curr=1;
-      currans[0]=0;
-      for(ll i=1;i<n;i++){
-        if(s[i]==s[i-1]){
-            curr++;
-        }
-        else{
-            curr=1;
-        }
-        currans[i]=curr/2;
+    ll n,m;
+    string s;
+    cin>>n>>m>>s;
+    vector<vector<ll> >pref(6,vector<ll>(n+1));
+    for(ll i=0;i<6;i++){
+      for(ll j=0;j<n;j++){
+        pref[i][j+1]=pref[i][j]+(str[i][j%3]!=s[j]);
       }
-      for(ll i=1;i<n;i++){
-        currans[i]=currans[i-1]+currans[i];
+    }
+    ll l,r;
+    while(m--){
+      cin>>l>>r;
+      ll ans=INT64_MAX;
+      for(ll i=0;i<6;i++){
+        ans=min(ans,pref[i][r]-pref[i][l-1]);
       }
-      ll l,r;
-      cout<<currans<<endl;
-      while(q--){
-        cin>>l>>r;
-        l--,r--;
-        ll ans=currans[r];
-        if(l>1) ans-=currans[l-1];
-        cout<<ans<<endl;
-      }
+      cout<<ans<<nn;
+    }
     }
 
 

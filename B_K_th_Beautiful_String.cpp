@@ -152,7 +152,25 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
+ll n,k;
+ll func(ll pos){
+    return 1+(pos*(pos+1))/2<=k;
+}
 
+ll bs(ll low,ll high){
+    ll mid;
+    while(low+1<high){
+        mid=(high+low)>>1;
+        //cout<<mid<<" "<<func(mid)<<endl;
+        if(func(mid)){
+            low=mid;
+        }
+        else{
+            high=mid;
+        }
+    }
+    return low;
+}
 int main()
 {
     fast;
@@ -160,23 +178,29 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-      ll ans=0;
-      string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
-      for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
-      }
-      cout<<ans<<nn;
+       cin>>n>>k;
+       string s(n,'a');
+    //    for(ll i=0;i<n;i++){
+    //     s[i]='a';
+    //    }
+    
+        ll l=0,r=n;
+        ll pos1=bs(l,r);
+        // cout<<pos1<<nn;
+        ll posb2=n-2-pos1;
+        s[posb2]='b';
+        ll posb1=n-1;
+        ll curr=1+(pos1*(pos1+1))/2;
+        // cout<<curr<<" "<<k<<nn;
+         posb1=k-curr;
+        // cout<<n-posb1<<nn;
+        posb1=n-posb1-1;
+        s[posb1]='b';
+        cout<<s<<nn;
+        
     }
 
 

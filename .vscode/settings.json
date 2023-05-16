@@ -67,7 +67,8 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "thread": "cpp",
-        "typeindex": "cpp"
+        "typeindex": "cpp",
+        "stack": "cpp"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }

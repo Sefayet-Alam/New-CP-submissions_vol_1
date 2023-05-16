@@ -160,23 +160,48 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-      ll ans=0;
-      string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
+      ll n,k;
+      cin>>n>>k;
+      vector<ll>vec(n);
+      cin>>vec;
+      vector<ll>pos,neg;
       for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
+        if(vec[i]>0){pos.push_back(vec[i]);}
+        else if(vec[i]<0) neg.push_back(-vec[i]);
       }
-      cout<<ans<<nn;
+    //   sort(all(vec));
+    if(pos.size()) vdsort(pos);
+    if(neg.size()) vdsort(neg);
+    // cout<<pos<<nn;
+    // cout<<neg<<nn;
+    
+    ll sz1=pos.size();
+    ll sz2=neg.size();
+    ll ans1=0;
+    ll seg=sz1/k;
+    // cout<<seg<<nn;
+    // ll ans=INT_MAX;
+    ll maxm=0;
+    if(sz1){
+        for(ll i=0;i<sz1;i+=k){
+            ans1+=2*pos[i];
+        }
+        maxm=max(maxm,pos[0]);
+    }
+    ll ans2=0;
+    seg=sz2/k;
+    if(sz2){
+      for(ll i=0;i<sz2;i+=k){
+            ans2+=2*neg[i];
+        }
+      maxm=max(maxm,neg[0]);
+    }
+    // cout<<ans1<<" "<<ans2<<" "<<maxm<<nn;
+    ll ans=ans1+ans2-maxm;
+    cout<<ans<<nn;
     }
 
 

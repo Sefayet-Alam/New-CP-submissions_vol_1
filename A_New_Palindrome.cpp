@@ -160,23 +160,28 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-      ll ans=0;
       string s;
       cin>>s;
       ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
+      map<char,ll>mpp;
       for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
+        mpp[s[i]]++;
       }
-      cout<<ans<<nn;
+      ll cnt=0;
+      for(auto it:mpp){
+        if(it.second>=2){
+            cnt++;
+        }
+      }
+      if(cnt>1){
+        cout<<"YES"<<nn;
+      }
+      else{
+        cout<<"NO"<<nn;
+      }
     }
 
 

@@ -57,7 +57,7 @@ using namespace __gnu_pbds;
 #define md                  10000007
 #define PI 3.1415926535897932384626
 const double EPS = 1e-9;
-const ll N = 2e5+10;
+const ll N = 2e7+10;
 const ll M = 1e9+7;
 
 
@@ -153,6 +153,24 @@ struct custom_hash {
     }
 };
 
+vector<bool> Primes(N,1);
+vector<ll>primenos;
+void SieveOfEratosthenes(ll n)
+{
+    Primes[1]=0;
+    for (ll i=2;i*i<=n;i++) {
+    if(Primes[i]==1){     
+    for(ll j=i*i;j<=n;j+=i)
+        Primes[j]=0;
+        }
+    }
+    for(ll i=1;i<n;i++){
+        if(Primes[i]){
+            primenos.push_back(i);
+        }
+    }
+}
+
 int main()
 {
     fast;
@@ -160,23 +178,24 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
-
+    cin>>t;
+    SieveOfEratosthenes(N);
     while(t--){
-      ll ans=0;
-      string s;
-      cin>>s;
-      ll n=s.size();
-      map<ll,ll>freq;
-      freq[0]=1;
-      ll curr=0;
-      for(ll i=0;i<n;i++){
-        ll d=s[i]-'0';
-        curr^=(1LL<<d);
-        ans+=freq[curr];
-        freq[curr]++;
-      }
-      cout<<ans<<nn;
+        ll n;
+        cin>>n;
+        ll p,q;
+        for(auto it:primenos){
+            if(n%(it*it)==0){
+                p=it,q=n/(it*it);
+                break;
+            }
+            else if(n%it==0){
+                p=sqrt(n/it);
+                q=it;
+                break;
+            }
+        }
+        cout<<p<<" "<<q<<nn;
     }
 
 
