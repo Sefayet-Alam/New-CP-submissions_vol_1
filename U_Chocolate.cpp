@@ -163,78 +163,31 @@ int main()
     //cin>>t;
 
     while(t--){
-        ll n,m;
-        cin>>n>>m;
-        vector<ll>h(n),w(m);
-        cin>>h>>w;
-        if(n==1){
-            ll ans=INT64_MAX;
-            for(ll i=0;i<m;i++){
-                ans=min(ans,abs(w[i]-h[0]));
+        ll n;
+        cin>>n;
+        vector<ll>vec(n);
+        ll curr=0;
+        cin>>vec;
+        ll ans=0;
+        ll minm=n,maxm=0;
+        for(ll i=0;i<n;i++){
+            if(vec[i]){
+                minm=min(i,minm);
+                maxm=max(maxm,i);
+                ans=1;
             }
-            cout<<ans<<nn;
-            continue;
         }
-       
-        sort(all(w));
-        sort(all(h));
-        vector<ll>pref((n)/2);
-        vector<ll>suff((n)/2);
-        pref[0]=abs(h[1]-h[0]);
-        ll curr=1;
-        for(ll i=3;i<n;i+=2){
-            pref[curr]=pref[curr-1]+abs(h[i]-h[i-1]);
-            curr++;
-        }
-        curr=1;
-        suff[0]=abs(h[n-1]-h[n-2]);
-        // cout<<suff[0]<<nn;
-        for(ll i=n-4;i>=0;i-=2){
-            suff[curr]=suff[curr-1]+abs(h[i]-h[i+1]);
-            curr++;
-        }
-        ll ans=INT64_MAX;
-        ll ex;
-        ll sz=n/2;
-        // cout<<h<<nn;
-        // cout<<w<<nn;
-        // cout<<pref<<nn;
-        // cout<<suff<<nn;
-        for(ll i=0;i<m;i++){
-            curr=0;
-            if(w[i]>=h[n-1]){
-            ex=abs(w[i]-h[n-1]);
-            curr=ex+pref[sz-1];
-            // cout<<ex<<"    "<<pref[sz-1]<<nn;
-            ans=min(curr,ans);
-            }
-            else if(w[i]<=h[0]){
-                ex=abs(w[i]-h[0]);
-                curr=ex+suff[sz-1];
-                ans=min(curr,ans);
+        for(ll i=minm;i<=maxm;i++){
+            if(vec[i]==0){
+                curr++;
             }
             else{
-            ll pos=lower_bound(all(h),w[i])-h.begin();
-            // cout<<pos<<nn;
-            curr=0;
-            // cout<<i<<" "<<pos<<" "<<pref[pos/2-1]<<" "<<suff[n/2-2-(pos/2-1)]<<nn;
-            if(pos%2){
-            if(pos/2-1>=0) curr+=pref[pos/2-1];
-            if(n/2-2-(pos/2-1)>=0) curr+=suff[n/2-2-(pos/2-1)];
-            curr+=abs(h[pos-1]-w[i]);
+                // cout<<i<<" "<<curr<<nn;
+                if(curr) ans*=(curr+1);
+                curr=0;
             }
-            else{
-            if(pos/2-1>=0) curr+=pref[pos/2-1];
-            if(n/2-1-(pos/2)>=0) curr+=suff[n/2-1-(pos/2)];
-            curr+=abs(h[pos]-w[i]);
-
-            }
-            ans=min(ans,curr);
-            }
-            // cout<<i<<" "<<curr<<nn;
         }
         cout<<ans<<nn;
-
     }
 
 

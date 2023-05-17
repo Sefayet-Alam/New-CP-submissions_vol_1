@@ -153,6 +153,24 @@ struct custom_hash {
     }
 };
 
+vector<bool> Primes(N,1);
+vector<ll>primenos;
+void SieveOfEratosthenes(ll n)
+{
+    Primes[1]=0;
+    for (ll i=2;i*i<=n;i++) {
+    if(Primes[i]==1){     
+    for(ll j=i*i;j<=n;j+=i)
+        Primes[j]=0;
+        }
+    }
+    for(ll i=1;i<n;i++){
+        if(Primes[i]){
+            primenos.push_back(i);
+        }
+    }
+}
+
 int main()
 {
     fast;
@@ -161,81 +179,32 @@ int main()
      //ll tno=1;;
      t=1;
     //cin>>t;
-
+    SieveOfEratosthenes(N);
     while(t--){
-        ll n,m;
-        cin>>n>>m;
-        vector<ll>h(n),w(m);
-        cin>>h>>w;
-        if(n==1){
-            ll ans=INT64_MAX;
-            for(ll i=0;i<m;i++){
-                ans=min(ans,abs(w[i]-h[0]));
+      ll n,g;
+      cin>>n;
+      ll cnt=0;
+    map<ll,ll>freq;
+      for(ll i=1;i<=n;i++){
+         g=i;
+        for(auto it:primenos){
+            if(it>g) break; 
+            while(g%it==0){
+                g/=it;
+                freq[it]++;
             }
-            cout<<ans<<nn;
-            continue;
+           
         }
-       
-        sort(all(w));
-        sort(all(h));
-        vector<ll>pref((n)/2);
-        vector<ll>suff((n)/2);
-        pref[0]=abs(h[1]-h[0]);
-        ll curr=1;
-        for(ll i=3;i<n;i+=2){
-            pref[curr]=pref[curr-1]+abs(h[i]-h[i-1]);
-            curr++;
-        }
-        curr=1;
-        suff[0]=abs(h[n-1]-h[n-2]);
-        // cout<<suff[0]<<nn;
-        for(ll i=n-4;i>=0;i-=2){
-            suff[curr]=suff[curr-1]+abs(h[i]-h[i+1]);
-            curr++;
-        }
-        ll ans=INT64_MAX;
-        ll ex;
-        ll sz=n/2;
-        // cout<<h<<nn;
-        // cout<<w<<nn;
-        // cout<<pref<<nn;
-        // cout<<suff<<nn;
-        for(ll i=0;i<m;i++){
-            curr=0;
-            if(w[i]>=h[n-1]){
-            ex=abs(w[i]-h[n-1]);
-            curr=ex+pref[sz-1];
-            // cout<<ex<<"    "<<pref[sz-1]<<nn;
-            ans=min(curr,ans);
-            }
-            else if(w[i]<=h[0]){
-                ex=abs(w[i]-h[0]);
-                curr=ex+suff[sz-1];
-                ans=min(curr,ans);
-            }
-            else{
-            ll pos=lower_bound(all(h),w[i])-h.begin();
-            // cout<<pos<<nn;
-            curr=0;
-            // cout<<i<<" "<<pos<<" "<<pref[pos/2-1]<<" "<<suff[n/2-2-(pos/2-1)]<<nn;
-            if(pos%2){
-            if(pos/2-1>=0) curr+=pref[pos/2-1];
-            if(n/2-2-(pos/2-1)>=0) curr+=suff[n/2-2-(pos/2-1)];
-            curr+=abs(h[pos-1]-w[i]);
-            }
-            else{
-            if(pos/2-1>=0) curr+=pref[pos/2-1];
-            if(n/2-1-(pos/2)>=0) curr+=suff[n/2-1-(pos/2)];
-            curr+=abs(h[pos]-w[i]);
-
-            }
-            ans=min(ans,curr);
-            }
-            // cout<<i<<" "<<curr<<nn;
-        }
-        cout<<ans<<nn;
-
+         if(g>1){freq[g]++;}
+      }
+      ll ans=1;
+      for(auto it:freq){
+        // cout<<it<<nn;
+        ans=(ans*(it.second+1))%M;
+      }
+      cout<<ans<<nn;
     }
+
 
 
     return 0;
