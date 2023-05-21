@@ -153,43 +153,6 @@ struct custom_hash {
     }
 };
 
-ll FM[N];
-int is_initialized = 0;
-ll factorialMod(ll n, ll x){
-    if (!is_initialized){
-        FM[0] = 1 % x;
-        for (int i = 1; i < N; i++)
-            FM[i] = (FM[i - 1] * i) % x;
-        is_initialized = 1;
-    }
-    return FM[n];
-}
-
-ll powerMod(ll x, ll y, ll p){
-    ll res = 1 % p;
-    x = x % p;
-    while (y > 0){
-        if (y & 1) res = (res * x) % p;
-        y = y >> 1;
-        x = (x * x) % p;
-    }
-    return res;
-}
-
-ll inverseMod(ll a, ll x){
-    return powerMod(a, x - 2, x);
-}
-
-ll nCrMod(ll n, ll r, ll x){
-    if (r == 0) return 1;
-    if (r > n) return 0;
-    ll res = factorialMod(n, x);
-    ll fr = factorialMod(r, x);
-    ll zr = factorialMod(n - r, x);
-    res = (res * inverseMod((fr * zr) % x, x)) % x;
-    return res;
-}
-
 int main()
 {
     fast;
@@ -197,22 +160,37 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-      ll n,k;
-      cin>>n>>k;
-      for(ll i=1;i<=k;i++){
-        ll ans=nCrMod(n-k+1LL,i,M);
-        ll mult=nCrMod(k-1,k-i,M);
-        ans=(ans*mult)%M;
-        cout<<ans<<nn;
-        
+      ll n,m;
+      cin>>m>>n;
+      if(n>m){cout<<"NO"<<nn; }
+      else if(n==m){
+        cout<<"YES"<<nn;
       }
-    
-
+      else{
+        ll k=m;
+        vector<ll>mes;
+        while(k && k%2==0){
+            mes.push_back(k);
+            k/=2;
+        }
+        ll g=n;
+        if(k)mes.push_back(k);
+        ll sz=mes.size();
+       
+        sort(all(mes));
+        //  cout<<mes<<nn;
+        for(ll i=sz-1;i>=0;i--){
+            g=g%mes[i];
+        }
+        if(g==0) cout<<"YES"<<nn;
+        else cout<<"NO"<<nn;
+      }
     }
 
 
     return 0;
 }
+

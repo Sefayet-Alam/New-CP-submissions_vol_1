@@ -152,7 +152,6 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-
 ll FM[N];
 int is_initialized = 0;
 ll factorialMod(ll n, ll x){
@@ -189,7 +188,6 @@ ll nCrMod(ll n, ll r, ll x){
     res = (res * inverseMod((fr * zr) % x, x)) % x;
     return res;
 }
-
 int main()
 {
     fast;
@@ -200,19 +198,34 @@ int main()
     //cin>>t;
 
     while(t--){
-      ll n,k;
-      cin>>n>>k;
-      for(ll i=1;i<=k;i++){
-        ll ans=nCrMod(n-k+1LL,i,M);
-        ll mult=nCrMod(k-1,k-i,M);
-        ans=(ans*mult)%M;
-        cout<<ans<<nn;
-        
-      }
+      ll n;
+      cin>>n;
+      vector<ll>vec(n+1);
+      cin>>vec;
     
-
+    // cout<<vec<<nn;
+    ll sz=0;
+    map<ll,ll>vis;
+    for(ll i=0;i<=n;i++){
+        if(!vis[vec[i]]){
+            // cout<<1<<" "<<i<<nn;
+            vis[vec[i]]=i+1;
+        }
+        else{
+            sz=i+1-vis[vec[i]]+1;
+            break;
+        }
+    }
+    // cout<<sz<<nn;
+      for(ll i=1;i<=n+1;i++){
+        ll ans1=nCrMod(n+1,i,M);
+        ll minus=nCrMod(n+1-sz,i-1,M);
+        ans1=(ans1-minus+M)%M;
+        cout<<ans1<<nn;
+      }
     }
 
 
     return 0;
 }
+

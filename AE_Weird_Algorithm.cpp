@@ -153,43 +153,6 @@ struct custom_hash {
     }
 };
 
-ll FM[N];
-int is_initialized = 0;
-ll factorialMod(ll n, ll x){
-    if (!is_initialized){
-        FM[0] = 1 % x;
-        for (int i = 1; i < N; i++)
-            FM[i] = (FM[i - 1] * i) % x;
-        is_initialized = 1;
-    }
-    return FM[n];
-}
-
-ll powerMod(ll x, ll y, ll p){
-    ll res = 1 % p;
-    x = x % p;
-    while (y > 0){
-        if (y & 1) res = (res * x) % p;
-        y = y >> 1;
-        x = (x * x) % p;
-    }
-    return res;
-}
-
-ll inverseMod(ll a, ll x){
-    return powerMod(a, x - 2, x);
-}
-
-ll nCrMod(ll n, ll r, ll x){
-    if (r == 0) return 1;
-    if (r > n) return 0;
-    ll res = factorialMod(n, x);
-    ll fr = factorialMod(r, x);
-    ll zr = factorialMod(n - r, x);
-    res = (res * inverseMod((fr * zr) % x, x)) % x;
-    return res;
-}
-
 int main()
 {
     fast;
@@ -200,19 +163,19 @@ int main()
     //cin>>t;
 
     while(t--){
-      ll n,k;
-      cin>>n>>k;
-      for(ll i=1;i<=k;i++){
-        ll ans=nCrMod(n-k+1LL,i,M);
-        ll mult=nCrMod(k-1,k-i,M);
-        ans=(ans*mult)%M;
-        cout<<ans<<nn;
+        ll n;
+        cin>>n;
+        cout<<n<<" ";
+        while(n>1){
+        if(n==1) {cout<<1<<endl; break;}
+        if(n%2==0) {n/=2;}
+        else {n=n*3+1;}
+        cout<<n<<" ";
+        }
         
-      }
-    
-
     }
 
 
     return 0;
 }
+

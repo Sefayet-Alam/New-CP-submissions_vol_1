@@ -57,7 +57,7 @@ using namespace __gnu_pbds;
 #define md                  10000007
 #define PI 3.1415926535897932384626
 const double EPS = 1e-9;
-const ll N = 2e5+10;
+const ll N = 2e6+10;
 const ll M = 1e9+7;
 
 
@@ -152,13 +152,12 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-
 ll FM[N];
 int is_initialized = 0;
 ll factorialMod(ll n, ll x){
     if (!is_initialized){
         FM[0] = 1 % x;
-        for (int i = 1; i < N; i++)
+        for (ll i = 1; i < N; i++)
             FM[i] = (FM[i - 1] * i) % x;
         is_initialized = 1;
     }
@@ -189,7 +188,6 @@ ll nCrMod(ll n, ll r, ll x){
     res = (res * inverseMod((fr * zr) % x, x)) % x;
     return res;
 }
-
 int main()
 {
     fast;
@@ -200,19 +198,20 @@ int main()
     //cin>>t;
 
     while(t--){
-      ll n,k;
-      cin>>n>>k;
-      for(ll i=1;i<=k;i++){
-        ll ans=nCrMod(n-k+1LL,i,M);
-        ll mult=nCrMod(k-1,k-i,M);
-        ans=(ans*mult)%M;
-        cout<<ans<<nn;
-        
+      ll h,w,a,b;
+      cin>>h>>w>>a>>b;
+      ll ans=0;
+      ll curr1=0,curr2=0,curr=0;
+      for(ll i=1;i<=h-a;i++){
+        curr1=nCrMod(i+b-2,b-1,M);
+        curr2=nCrMod(h-i+w-b-1,w-b-1,M);
+        curr=(curr1*curr2)%M;
+        ans=(ans+curr)%M;
       }
-    
-
+      cout<<ans<<nn;
     }
 
 
     return 0;
 }
+

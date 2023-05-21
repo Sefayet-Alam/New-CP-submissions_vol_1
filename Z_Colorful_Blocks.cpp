@@ -58,7 +58,7 @@ using namespace __gnu_pbds;
 #define PI 3.1415926535897932384626
 const double EPS = 1e-9;
 const ll N = 2e5+10;
-const ll M = 1e9+7;
+const ll M = 998244353LL; 
 
 
 ///INLINE FUNCTIONS
@@ -152,7 +152,6 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-
 ll FM[N];
 int is_initialized = 0;
 ll factorialMod(ll n, ll x){
@@ -189,7 +188,6 @@ ll nCrMod(ll n, ll r, ll x){
     res = (res * inverseMod((fr * zr) % x, x)) % x;
     return res;
 }
-
 int main()
 {
     fast;
@@ -200,19 +198,19 @@ int main()
     //cin>>t;
 
     while(t--){
-      ll n,k;
-      cin>>n>>k;
-      for(ll i=1;i<=k;i++){
-        ll ans=nCrMod(n-k+1LL,i,M);
-        ll mult=nCrMod(k-1,k-i,M);
-        ans=(ans*mult)%M;
-        cout<<ans<<nn;
-        
-      }
-    
-
+      ll n,m,k;
+      cin>>n>>m>>k;
+    ll curr=0,ans=0;
+    for(ll i=0;i<=k;i++){
+        curr=powerMod(m-1,n-1-i,M);
+        curr=(curr*m)%M;
+        curr=(curr*(nCrMod(n-1,i,M)))%M;
+        ans=(ans+curr)%M;
+    }
+    cout<<ans<<nn;
     }
 
 
     return 0;
 }
+

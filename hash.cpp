@@ -152,44 +152,67 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
+const ll base=33LL;
+ll pw[N];
+ll inv[N];
+ll Hash[N];
 
-ll FM[N];
-int is_initialized = 0;
-ll factorialMod(ll n, ll x){
-    if (!is_initialized){
-        FM[0] = 1 % x;
-        for (int i = 1; i < N; i++)
-            FM[i] = (FM[i - 1] * i) % x;
-        is_initialized = 1;
-    }
-    return FM[n];
-}
-
-ll powerMod(ll x, ll y, ll p){
-    ll res = 1 % p;
-    x = x % p;
-    while (y > 0){
-        if (y & 1) res = (res * x) % p;
-        y = y >> 1;
-        x = (x * x) % p;
+ll add(ll a,ll b,ll mod){
+    ll res=(a+b)%mod;
+    if(res<0){
+        res+=mod;
     }
     return res;
 }
 
-ll inverseMod(ll a, ll x){
-    return powerMod(a, x - 2, x);
-}
-
-ll nCrMod(ll n, ll r, ll x){
-    if (r == 0) return 1;
-    if (r > n) return 0;
-    ll res = factorialMod(n, x);
-    ll fr = factorialMod(r, x);
-    ll zr = factorialMod(n - r, x);
-    res = (res * inverseMod((fr * zr) % x, x)) % x;
+ll mult(ll a,ll b,ll mod){
+    ll res=(a*b)%M;
+    if(res<mod){
+        res+=mod;
+    }
     return res;
 }
 
+ll power(ll a,ll b,ll mod)
+{   ll res = 1;   
+    // a=a%mod; 
+    // if (a==0) return 0; 
+    while(b)
+    {
+        if(b&1) res=mult(res,a,mod);
+        b /=2;
+        a=mult(a,a,mod);
+    }
+    return res;
+}
+
+
+void precalc(){
+    pw[0]=1;
+    for(ll i=1;i<N;i++){
+        pw[i]=mult(pw[i-1],base,M);
+    }
+   ll pow_inv=power(base,M-2,M);
+   inv[0]=1;
+     for(ll i=1;i<N;i++){
+        inv[i]=mult(inv[i-1],pow_inv,M);
+    }
+
+}
+
+void build(string s){
+    ll n=s.size();
+    for(ll i=0;i<n;i++){
+        Hash[i]=add((i==0)? 0:Hash[i-1],mult(pw[i],s[i]-'a'+1,M),M); 
+    }
+
+}
+
+ll getHash(ll x,ll y){
+    ll res=add(Hash[y],(x==0) ? 0: -Hash[x-1],M);
+    res=mult(res, (x==0) ? 1:inv[x-1],M);
+    return res;
+}
 int main()
 {
     fast;
@@ -198,21 +221,18 @@ int main()
      //ll tno=1;;
      t=1;
     //cin>>t;
-
+    precalc();
     while(t--){
-      ll n,k;
-      cin>>n>>k;
-      for(ll i=1;i<=k;i++){
-        ll ans=nCrMod(n-k+1LL,i,M);
-        ll mult=nCrMod(k-1,k-i,M);
-        ans=(ans*mult)%M;
+      string s;
+      cin>>s;
+      build(s);
+      ll n=s.size();
+      ll l=0,r=n-1;
+        ll ans=getHash(l,r);
         cout<<ans<<nn;
-        
-      }
-    
-
     }
 
 
     return 0;
 }
+
