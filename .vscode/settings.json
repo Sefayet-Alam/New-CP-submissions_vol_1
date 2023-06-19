@@ -70,5 +70,6 @@
         "typeindex": "cpp",
         "stack": "cpp"
     },
-    "C_Cpp.errorSquiggles": "Enabled"
+    "C_Cpp.errorSquiggles": "Enabled",
+    "cph.general.onceMaintainerMessage": false
 }

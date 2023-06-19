@@ -152,31 +152,24 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-
-vpll g[N];
-vl dist(N,LLONG_MAX);
-vl par(N,-1);
-
-void dijkstra(int source){
-    QP<pll> pq;
-    pq.push(mp(0,source));
-    dist[source]=0;
-    while(pq.size()){
-        ll v=pq.top().second;
-        ll v_dist=pq.top().first;
-        pq.pop();
-        if(dist[v]<v_dist) continue;
-        for(auto &child:g[v]){
-            ll child_v=child.first;
-            ll wt=child.second;
-            if(dist[v]+wt<dist[child_v]){
-                dist[child_v]=dist[v]+wt;
-                par[child_v]=v;
-                pq.push(mp(dist[child_v],child_v));
+vector<pair<ll,ll>>vec(N);
+ll n,d;
+ll x,y;
+vector<ll>vis(N,0);
+ll calc(ll x,ll y,ll x1,ll y1){
+    return ((x-x1)*(x-x1)+(y-y1)*(y-y1));
+}
+void func(ll i){
+    vis[i]=1;
+    for(ll j=0;j<n;j++){
+        if(i!=j){
+            if(calc(vec[i].first,vec[i].second,vec[j].first,vec[j].second)<=d*d){
+                if(!vis[j]) func(j);
             }
         }
     }
 }
+
 int main()
 {
     fast;
@@ -184,38 +177,25 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-     cin>>t;
+    //cin>>t;
 
     while(t--){
-      ll n,m;
-      cin>>n>>m;
-      vector<ll>infected(m);
-      cin>>infected;
-      sort(infected.begin(),infected.end());
-      vector<ll>segments;
-    
-      for(ll i=1;i<m;i++){
-        ll dist=(infected[i]-infected[i-1]-1);
-        segments.push_back(dist);
+      cin>>n>>d;
+     vec.resize(n);
+      for(ll i=0;i<n;i++){
+        cin>>x>>y;
+        vec[i]={x,y};
       }
-       segments.push_back(n-infected[m-1]+infected[0]-1);
-       vdsort(segments);
-    
-      ll day=0;
-      ll pro=0;
-      ll ans=0;
-      //cout<<segments<<endl;
-      bool f=0;
-       ll minus=0;
-      for(ll i=0;i<m;i++){
-        ll room=segments[i]-minus;
-        if(room==1) ans++;
-        else ans+=max(0LL,room-1);
-        minus+=4;
-      
+      vis.resize(n);
+      func(0);
+    //   cout<<vis<<nn;
+      for(ll i=0;i<n;i++){
+        if(vis[i]) cout<<"Yes"<<nn;
+        else{
+            // cout<<vec[i]<<nn;
+            cout<<"No"<<nn;
+            }
       }
-    
-      cout<<n-ans<<endl;
 
     }
 
