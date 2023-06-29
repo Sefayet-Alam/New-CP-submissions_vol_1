@@ -170,17 +170,19 @@ ll func(ll dist){
 
 ll bs(ll low,ll high){
     ll mid;
-    while(low+1<high){
-        mid=(high+low)>>1;
+    ll ans=0;
+    while(low<=high){
+        mid=low+(high-low)/2;
         //cout<<mid<<" "<<func(mid)<<endl;
         if(func(mid)){
-            low=mid;
+            ans=mid;
+            low=mid+1;
         }
         else{
-            high=mid;
+            high=mid-1;
         }
     }
-     return low;
+    return ans;
 }
 
 int main()

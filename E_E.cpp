@@ -152,62 +152,34 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-
-ll T=0;
-
-ll n,m;
-
-void solve() {
-    ll a=0,b=0,i=0,j=0,k=0,l=0,r=0,ans=0,temp=0,cnt=0,sum=0;
-    string s,s1,s2,s3;
-
-    vl v(n);
-    cin>>v;
-
-    auto func=[&](ll mid){
-        ll mn=0;
-        for(i=0;i<n;i++){
-            mn+=Ceil(v[i],mid);
-        }
-        return mn<=m;
-    };
-    
-    auto bs=[&](ll lo,ll hi){
-    
-        ll mid=0;
-        while(hi-lo>=2){
-            mid=(lo+hi)>>1;
-            if(func(mid)){
-                hi=mid;
-            }else{
-                lo=mid+1;
-            }
-        }
-    
-        if(func(lo)) return lo;
-        return hi;
-    };
-
-    ans=bs(0,1e9);
-
-    cout<<ans<<nn;
-
-}
-
-int main() {
+ll cnt[1000005], tot[1000005];
+int main()
+{
     fast;
-    
-    // #ifndef ONLINE_JUDGE
-    //     freopen("input.txt","r",stdin);
-    //     freopen("output.txt","w",stdout);
-    // #endif
+     ll t;
+    //setIO();
+     //ll tno=1;;
+     t=1;
+    cin>>t;
 
-    int t = 1;
-    // cin >> t;
-    while(1) {
-        cin>>n>>m;
-        if(n==-1) break;
-        solve();
+    while(t--){
+       ll n;
+    cin >> n;
+    ll a[n + 5], ans = 0;
+    for(ll i = 0; i <= 1000000; i++) cnt[i] = tot[i] = 0;
+    ll x = 0;
+    cnt[0] = 1;
+    for(ll i = 1; i <= n; i++) {
+        cin >> a[i];
+        x = (x ^ a[i]);
+        ans += cnt[x] * (i - 1) - tot[x];
+        tot[x] += i;
+        cnt[x]++;
     }
+    cout << ans << endl;
+    }
+
+
+    return 0;
 }
-    
+

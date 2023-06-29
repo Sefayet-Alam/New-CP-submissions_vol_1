@@ -152,6 +152,24 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
+vector<bool> Primes(N,1);
+vector<ll>primenos;
+void SieveOfEratosthenes(ll n)
+{
+    Primes[1]=0;
+    for (ll i=2;i*i<=n;i++) {
+    if(Primes[i]==1){     
+    for(ll j=i*i;j<=n;j+=i)
+        Primes[j]=0;
+        }
+    }
+    for(ll i=1;i<n;i++){
+        if(Primes[i]){
+            primenos.push_back(i);
+        }
+    }
+}
+
 
 int main()
 {
@@ -160,24 +178,24 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
-
+    cin>>t;
+    // SieveOfEratosthenes(N);
     while(t--){
-      string s;
-      cin>>s;
-      ll n=s.size();
-      vector<ll>vis(n,0);
-      for(ll i=0;i<n-1;i++){
-        if(s[i]==s[i+1]){
-            vis[i]=1;
+     ll n;
+     cin>>n;
+     ll ans=0;  
+     for(ll i=1;i*i<=n;i++){
+        if(n%i==0){
+            if(n/i!=i){
+                ans+=i;
+                ans+=n/i;
+            }
+            else{
+                ans+=n/i;
+            }
         }
-      }
-      for(ll i=0;i<n;i++){
-        if(!vis[i]){
-            cout<<s[i];
-        }
-      }
-      cout<<nn;
+     }
+     cout<<ans<<nn;
     }
 
 

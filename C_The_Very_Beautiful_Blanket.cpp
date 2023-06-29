@@ -160,12 +160,29 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-      ll a,b,c,d;
-      cin>>a>>b>>c>>d;
-      cout<<(a^b^c^d) )<<endl;
+    ll n,m;
+    cin>>n>>m;
+     ll arr[n][m];
+     ll k=1024;
+     ll cnt=1;
+     for(ll i=0;i<n;i++){
+        arr[i][0]=cnt++;
+     }
+     for(ll i=0;i<n;i++){
+        for(ll j=1;j<m;j++){
+            arr[i][j]=arr[i][j-1]+k;
+        }
+     }
+     cout<<n*m<<nn;
+     for(ll i=0;i<n;i++){
+        for(ll j=0;j<m;j++){
+            cout<<arr[i][j]<<" ";
+        }
+        cout<<nn;
+     }
     }
 
 
