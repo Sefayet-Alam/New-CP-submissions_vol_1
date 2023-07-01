@@ -152,92 +152,6 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-struct segment_tree{
-    ll size;
-    vector<ll>tree;
-    //INITIALIZATION
-    void init(ll n){
-        size=1;
-        while(size<n) size*=2;
-        tree.assign(2*size,0LL);
-    }
-    ll no_operation=LLONG_MAX;
-    ll merge(ll a,ll b){
-       if(b==no_operation) return a;
-       return b;
-    }
-    void apply_merge(ll &a,ll b){
-        a=merge(a,b);    
-    }   
-     void build(vector<ll> &a,ll x,ll lx,ll rx){
-        //linear time
-        if(rx-lx==1){
-            if(lx<a.size()){
-                tree[x]=a[lx];
-            }
-            return;
-        }
-        ll m=(lx+rx)/2;
-        build(a,2*x+1,lx,m);
-        build(a,2*x+2,m,rx);
-        tree[x]=merge(tree[2*x+1],tree[2*x+2]);
-    }
-    void build(vector<ll> &a){
-        //linear time
-        build(a,0,0,size);
-    }
-    //PROPAGATION
-    void progpagate(ll x,ll lx,ll rx){
-        if(rx-lx==1){
-            return;
-        }
-       apply_merge(tree[2*x+1],tree[x]);
-       apply_merge(tree[2*x+2],tree[x]);
-       tree[x]=no_operation;
-    }
-
-     ll get(ll i,ll x,ll lx,ll rx){
-        progpagate(x,lx,rx);
-        if(rx-lx==1) return tree[x];
-        ll m=(lx+rx)/2;
-        ll ret;
-        if(i<m){
-            ret=get(i,2*x+1,lx,m);
-        }
-        else{
-            ret=get(i,2*x+2,m,rx);
-        }
-        return merge(ret,tree[x]);
-    }
-    ll get(ll i){
-        //gets the value of the ith position
-        return get(i,0,0,size);
-    }
-
-  
-    ///RANGE modify
-    void modify(ll l,ll r,ll v,ll x,ll lx,ll rx){
-       
-        progpagate(x,lx,rx);
-        if(lx>=r || l>=rx){
-            return;
-        }
-        if(lx>=l && rx<=r){
-            apply_merge(tree[x],v);
-            return;
-        }
-        ll m=(lx+rx)/2;
-        modify(l,r,v,2*x+1,lx,m);
-        modify(l,r,v,2*x+2,m,rx);  
-    }
-    void modify(ll l,ll r,ll v){
-       //assigns v from l to r
-        modify(l,r,v,0,0,size);
-    }
-   
-};
-
-
 
 int main()
 {
@@ -249,27 +163,38 @@ int main()
     //cin>>t;
 
     while(t--){
-        ll n,q;
-        cin>>n>>q;
-        vector<ll>vec(n,0);
-
-        segment_tree sg;
-        sg.init(n);
-        // sg.build(vec);
-
-        ll op,l,r,x;
-        while(q--){
-            cin>>op;
-            if(op==1){
-                cin>>l>>r>>x;
-                sg.modify(l,r,x);
-            }
-            else{
-                cin>>l;
-                cout<<sg.get(l)<<nn;
-            }
+      ll n;
+     cin>>n;
+     vector<ll>vec(n);
+     cin>>vec;
+     ll l=0,r=1;
+     ll last=vec[l];
+     ll now=vec[r];
+     ll ans=0;
+     while(r<n){
+        while(last<=now && r<n){
+            l++;
+            r++;
+            now=vec[r];
+            last=vec[l];
         }
-      
+        while(now<last && r<n-1){
+            ans++;
+            r++;
+            now+=vec[r];
+        }
+        if(now<last && r>=n-1){
+            ans++;
+            break;
+        }
+        else{
+            l=r-1;
+            last=now;
+            r++;
+            now=vec[r];
+        }
+     }
+     cout<<ans<<nn;
     }
 
 

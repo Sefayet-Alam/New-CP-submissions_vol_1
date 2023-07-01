@@ -154,22 +154,21 @@ struct custom_hash {
 };
 struct segment_tree{
     ll size;
-    vector<ll>tree;
+    vector<ll>tree;//for range add
+    vector<ll>lazy;//for minm 
     //INITIALIZATION
+    ll neutral=LLONG_MAX;
     void init(ll n){
         size=1;
         while(size<n) size*=2;
         tree.assign(2*size,0LL);
+        lazy.assign(2*size,0);
     }
-    ll no_operation=LLONG_MAX;
     ll merge(ll a,ll b){
-       if(b==no_operation) return a;
-       return b;
+        return a+b;
     }
-    void apply_merge(ll &a,ll b){
-        a=merge(a,b);    
-    }   
-     void build(vector<ll> &a,ll x,ll lx,ll rx){
+
+    void build(vector<ll> &a,ll x,ll lx,ll rx){
         //linear time
         if(rx-lx==1){
             if(lx<a.size()){
@@ -186,18 +185,30 @@ struct segment_tree{
         //linear time
         build(a,0,0,size);
     }
-    //PROPAGATION
-    void progpagate(ll x,ll lx,ll rx){
+    //SET AND GET
+    void set(ll i,ll val,ll x,ll lx,ll rx){
         if(rx-lx==1){
+            //leaf
+            tree[x]=val;
+            lazy[x]+=val;
             return;
         }
-       apply_merge(tree[2*x+1],tree[x]);
-       apply_merge(tree[2*x+2],tree[x]);
-       tree[x]=no_operation;
+        ll m=(lx+rx)/2;
+        if(i<m){
+            set(i,val,2*x+1,lx,m);
+        }
+        else{
+            set(i,val,2*x+2,m,rx);
+        }
+        tree[x]=merge(tree[2*x+1],tree[2*x+2]);
+        lazy[x]=min(lazy[2*x+1],lazy[2*x+2])+tree[x];
+    }
+    void set(ll i,ll val){
+        // assigns val at index i
+        set(i,val,0,0,size);
     }
 
      ll get(ll i,ll x,ll lx,ll rx){
-        progpagate(x,lx,rx);
         if(rx-lx==1) return tree[x];
         ll m=(lx+rx)/2;
         ll ret;
@@ -214,31 +225,62 @@ struct segment_tree{
         return get(i,0,0,size);
     }
 
-  
-    ///RANGE modify
-    void modify(ll l,ll r,ll v,ll x,ll lx,ll rx){
-       
-        progpagate(x,lx,rx);
+    ///RANGE SUM
+    ll sum(ll l,ll r,ll x,ll lx,ll rx){
+        if(lx>=r || l>=rx){
+            return 0;
+        }
+        if(lx>=l && rx<=r){
+            return tree[x];
+        }
+        ll m=(lx+rx)/2;
+        ll s1=sum(l,r,2*x+1,lx,m);
+        ll s2=sum(l,r,2*x+2,m,rx);
+        return merge(s1,s2);
+    }
+    ll sum(ll l,ll r){
+        //returns sum from l to r
+        return sum(l,r,0,0,size);
+    }
+
+    //RANGE ADD
+    void add(ll l,ll r,ll v,ll x,ll lx,ll rx){
         if(lx>=r || l>=rx){
             return;
         }
         if(lx>=l && rx<=r){
-            apply_merge(tree[x],v);
+            tree[x]=merge(tree[x],v);
+            lazy[x]+=v;
             return;
         }
         ll m=(lx+rx)/2;
-        modify(l,r,v,2*x+1,lx,m);
-        modify(l,r,v,2*x+2,m,rx);  
+        add(l,r,v,2*x+1,lx,m);
+        add(l,r,v,2*x+2,m,rx);  
+        lazy[x]=min(lazy[2*x+1],lazy[2*x+2])+tree[x];
     }
-    void modify(ll l,ll r,ll v){
-       //assigns v from l to r
-        modify(l,r,v,0,0,size);
+    void add(ll l,ll r,ll v){
+        //adds v from l to r
+        add(l,r,v,0,0,size);
+    }
+
+    // get  minm
+    ll get_min(ll l,ll r,ll x,ll lx,ll rx){
+         if(lx>=r || l>=rx){
+            return neutral;
+        }
+        if(lx>=l && rx<=r){
+            return lazy[x];
+        }
+        ll m=(lx+rx)/2;
+        ll s1=get_min(l,r,2*x+1,lx,m);
+        ll s2=get_min(l,r,2*x+2,m,rx);  
+        return min(s1,s2)+tree[x];
+    }   
+    ll get_min(ll l,ll r){
+        return get_min(l,r,0,0,size);
     }
    
 };
-
-
-
 int main()
 {
     fast;
@@ -249,27 +291,24 @@ int main()
     //cin>>t;
 
     while(t--){
-        ll n,q;
-        cin>>n>>q;
-        vector<ll>vec(n,0);
+      ll n,q;
+      cin>>n>>q;
 
-        segment_tree sg;
-        sg.init(n);
-        // sg.build(vec);
-
-        ll op,l,r,x;
-        while(q--){
-            cin>>op;
-            if(op==1){
-                cin>>l>>r>>x;
-                sg.modify(l,r,x);
-            }
-            else{
-                cin>>l;
-                cout<<sg.get(l)<<nn;
-            }
-        }
+      segment_tree sg;
+      sg.init(n);
       
+      ll op,l,r,x;
+      while(q--){
+        cin>>op;
+        if(op==1){
+            cin>>l>>r>>x;
+            sg.add(l,r,x);
+        }
+        else{
+            cin>>l>>r;
+            cout<<sg.get_min(l,r)<<nn;
+        }
+      }
     }
 
 

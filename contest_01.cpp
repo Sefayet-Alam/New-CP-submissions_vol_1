@@ -57,8 +57,8 @@ using namespace __gnu_pbds;
 #define md                  10000007
 #define PI 3.1415926535897932384626
 const double EPS = 1e-9;
-const ll N = 2e5+10;
-const ll M = 1e9+7;
+const ll N = 1e5+10;
+const ll M = 998244353;
 
 
 ///INLINE FUNCTIONS
@@ -152,93 +152,30 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-struct segment_tree{
-    ll size;
-    vector<ll>tree;
-    //INITIALIZATION
-    void init(ll n){
-        size=1;
-        while(size<n) size*=2;
-        tree.assign(2*size,0LL);
-    }
-    ll no_operation=LLONG_MAX;
-    ll merge(ll a,ll b){
-       if(b==no_operation) return a;
-       return b;
-    }
-    void apply_merge(ll &a,ll b){
-        a=merge(a,b);    
-    }   
-     void build(vector<ll> &a,ll x,ll lx,ll rx){
-        //linear time
-        if(rx-lx==1){
-            if(lx<a.size()){
-                tree[x]=a[lx];
-            }
-            return;
-        }
-        ll m=(lx+rx)/2;
-        build(a,2*x+1,lx,m);
-        build(a,2*x+2,m,rx);
-        tree[x]=merge(tree[2*x+1],tree[2*x+2]);
-    }
-    void build(vector<ll> &a){
-        //linear time
-        build(a,0,0,size);
-    }
-    //PROPAGATION
-    void progpagate(ll x,ll lx,ll rx){
-        if(rx-lx==1){
-            return;
-        }
-       apply_merge(tree[2*x+1],tree[x]);
-       apply_merge(tree[2*x+2],tree[x]);
-       tree[x]=no_operation;
+ll dp[N][4][4];
+ll n;
+vector<pair<pair<ll,ll>,ll>>vec;
+ll func(ll i,ll prevcol,ll currcol){
+    if(i==n){
+        return 1;
     }
 
-     ll get(ll i,ll x,ll lx,ll rx){
-        progpagate(x,lx,rx);
-        if(rx-lx==1) return tree[x];
-        ll m=(lx+rx)/2;
-        ll ret;
-        if(i<m){
-            ret=get(i,2*x+1,lx,m);
-        }
-        else{
-            ret=get(i,2*x+2,m,rx);
-        }
-        return merge(ret,tree[x]);
-    }
-    ll get(ll i){
-        //gets the value of the ith position
-        return get(i,0,0,size);
-    }
-
+    ll ans=0;
+    if(dp[i][prevcol][currcol]!=-1) return dp[i][prevcol][currcol];
   
-    ///RANGE modify
-    void modify(ll l,ll r,ll v,ll x,ll lx,ll rx){
-       
-        progpagate(x,lx,rx);
-        if(lx>=r || l>=rx){
-            return;
+    ll k=i+1;
+    while(k<n){
+        if(vec[k].first.first>vec[i].first.second){
+            ans=(ans+func(k,vec[i].second,vec[k].second))%M;
+        
         }
-        if(lx>=l && rx<=r){
-            apply_merge(tree[x],v);
-            return;
+        else if(vec[k].first.first<=vec[i].first.second && vec[k].second==vec[i].second){
+            ans=(ans+func(k,vec[i].second,vec[k].second))%M;
         }
-        ll m=(lx+rx)/2;
-        modify(l,r,v,2*x+1,lx,m);
-        modify(l,r,v,2*x+2,m,rx);  
+        k++;
     }
-    void modify(ll l,ll r,ll v){
-       //assigns v from l to r
-        modify(l,r,v,0,0,size);
-    }
-   
-};
-
-
-
+    return dp[i][prevcol][currcol]=ans;
+}
 int main()
 {
     fast;
@@ -246,30 +183,27 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-        ll n,q;
-        cin>>n>>q;
-        vector<ll>vec(n,0);
+      mem(dp,-1);
+      cin>>n;
+      ll l,r,c;
+    
+      for(ll i=0;i<n;i++){
+        cin>>l>>r>>c;
+        vec.push_back({{l,r},c});
+      }
+    //   vec.push_back({{LLONG_MAX,LLONG_MAX},3});
 
-        segment_tree sg;
-        sg.init(n);
-        // sg.build(vec);
-
-        ll op,l,r,x;
-        while(q--){
-            cin>>op;
-            if(op==1){
-                cin>>l>>r>>x;
-                sg.modify(l,r,x);
-            }
-            else{
-                cin>>l;
-                cout<<sg.get(l)<<nn;
-            }
-        }
-      
+      sort(all(vec));
+       ll ret=0;
+       for(ll i=0;i<n;i++){
+        ret=(ret+func(i,-1,vec[i].second))%M;
+       }
+       cout<<ret<<nn;
+      vec.clear();
+     
     }
 
 

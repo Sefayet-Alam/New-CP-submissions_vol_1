@@ -152,53 +152,114 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
+
+struct item{
+    ll value,lazy;
+};
+
 struct segment_tree{
     ll size;
-    vector<ll>tree;
+    vector<item>tree;
+    ll neutral=(1LL<<31)-1;
+    ll no_op=0;
+
+
+    //General operations : O(1)
+    ll merge(ll a,ll b){
+        return (a&b);
+    }
+
+    ll calc(ll a,ll b){
+       
+        return (a|b);
+    }
+
+    ll getval(item a){
+        return (a.lazy*a.value)%M;
+    }
+
+    item propagate_op(item par,item child){
+        item ret;
+        ret.lazy=calc(child.lazy,par.lazy);
+        ret.value=calc(child.value,par.lazy);
+      return ret;
+    }
+    item modify(item a,item b){
+        item ret;
+        ret.value=(a.value*a.lazy+b.value*b.lazy)%M;
+        ret.lazy=no_op;
+        return ret;
+    }
+
     //INITIALIZATION
+
     void init(ll n){
         size=1;
         while(size<n) size*=2;
-        tree.assign(2*size,0LL);
+        tree.resize(2*size);
     }
-    ll no_operation=LLONG_MAX;
-    ll merge(ll a,ll b){
-       if(b==no_operation) return a;
-       return b;
-    }
-    void apply_merge(ll &a,ll b){
-        a=merge(a,b);    
-    }   
-     void build(vector<ll> &a,ll x,ll lx,ll rx){
-        //linear time
+    
+    ///BUILD
+    void build(vector<ll> &a,ll x,ll lx,ll rx){
         if(rx-lx==1){
             if(lx<a.size()){
-                tree[x]=a[lx];
+                tree[x]={a[lx],no_op};
             }
             return;
         }
         ll m=(lx+rx)/2;
         build(a,2*x+1,lx,m);
         build(a,2*x+2,m,rx);
-        tree[x]=merge(tree[2*x+1],tree[2*x+2]);
+        tree[x]={merge(tree[2*x+1].value,tree[2*x+2].value),no_op};
     }
+
     void build(vector<ll> &a){
         //linear time
         build(a,0,0,size);
     }
-    //PROPAGATION
-    void progpagate(ll x,ll lx,ll rx){
+
+    ///LAZY PROPAGATION
+
+    //throws lazy values to its children nodes 
+    //updates values to children nodes
+    
+    void propagate(ll x,ll lx,ll rx){
         if(rx-lx==1){
             return;
         }
-       apply_merge(tree[2*x+1],tree[x]);
-       apply_merge(tree[2*x+2],tree[x]);
-       tree[x]=no_operation;
+        tree[2*x+1]=propagate_op(tree[x],tree[2*x+1]);
+        tree[2*x+2]=propagate_op(tree[x],tree[2*x+2]);
+        tree[x].lazy=no_op;
+    }
+
+    //SET AND GET
+    
+    void set(ll i,ll val,ll x,ll lx,ll rx){
+        propagate(x,lx,rx);
+        if(rx-lx==1){
+            //leaf
+            tree[x].value=val;
+            tree[x].lazy=no_op;
+            return;
+        }
+        ll m=(lx+rx)/2;
+        if(i<m){
+            set(i,val,2*x+1,lx,m);
+        }
+        else{
+            set(i,val,2*x+2,m,rx);
+        }
+        tree[x].value=merge(tree[2*x+1].value,tree[2*x+2].value);
+    }
+
+    void set(ll i,ll val){
+        // assigns val at index i
+        set(i,val,0,0,size);
     }
 
      ll get(ll i,ll x,ll lx,ll rx){
-        progpagate(x,lx,rx);
-        if(rx-lx==1) return tree[x];
+        propagate(x,lx,rx);
+        if(rx-lx==1) return tree[x].value;
         ll m=(lx+rx)/2;
         ll ret;
         if(i<m){
@@ -207,37 +268,57 @@ struct segment_tree{
         else{
             ret=get(i,2*x+2,m,rx);
         }
-        return merge(ret,tree[x]);
+        tree[x].value=merge(tree[2*x+1].value,tree[2*x+2].value);
+        return merge(ret,tree[x].value);
     }
     ll get(ll i){
         //gets the value of the ith position
+       
         return get(i,0,0,size);
     }
 
-  
-    ///RANGE modify
-    void modify(ll l,ll r,ll v,ll x,ll lx,ll rx){
+    ///RANGE SUM
+    ll sum(ll l,ll r,ll x,ll lx,ll rx){
+        propagate(x,lx,rx);
+        if(lx>=r || l>=rx){
+            return neutral;
+        }
+        if(lx>=l && rx<=r){
+            return tree[x].value;
+        }
+        ll m=(lx+rx)/2;
+        ll s1=sum(l,r,2*x+1,lx,m);
+        ll s2=sum(l,r,2*x+2,m,rx);
+        return merge(s1,s2);
+    }
+    
+    ll sum(ll l,ll r){
+        //returns sum from l to r
        
-        progpagate(x,lx,rx);
+        return sum(l,r,0,0,size);
+    }
+
+    //RANGE operation
+    void RangeOR(ll l,ll r,ll v,ll x,ll lx,ll rx){
+        propagate(x,lx,rx);
         if(lx>=r || l>=rx){
             return;
         }
         if(lx>=l && rx<=r){
-            apply_merge(tree[x],v);
+            tree[x].lazy=calc(tree[x].lazy,v);
+            tree[x].value=calc(tree[x].value,v);
             return;
         }
         ll m=(lx+rx)/2;
-        modify(l,r,v,2*x+1,lx,m);
-        modify(l,r,v,2*x+2,m,rx);  
+        RangeOR(l,r,v,2*x+1,lx,m);
+        RangeOR(l,r,v,2*x+2,m,rx);  
+        tree[x].value=merge(tree[2*x+1].value,tree[2*x+2].value);
     }
-    void modify(ll l,ll r,ll v){
-       //assigns v from l to r
-        modify(l,r,v,0,0,size);
-    }
-   
+    void RangeOR(ll l,ll r,ll v){
+        //multipliess v from l to r
+        RangeOR(l,r,v,0,0,size);
+    }   
 };
-
-
 
 int main()
 {
@@ -249,30 +330,32 @@ int main()
     //cin>>t;
 
     while(t--){
-        ll n,q;
-        cin>>n>>q;
-        vector<ll>vec(n,0);
+      ll n,q;
+      cin>>n>>q;
+      vector<ll>vec(n,0);
+     
+      segment_tree sg;
 
-        segment_tree sg;
-        sg.init(n);
-        // sg.build(vec);
+      sg.init(n);
+      sg.build(vec);
 
-        ll op,l,r,x;
-        while(q--){
-            cin>>op;
-            if(op==1){
-                cin>>l>>r>>x;
-                sg.modify(l,r,x);
-            }
-            else{
-                cin>>l;
-                cout<<sg.get(l)<<nn;
-            }
+      ll op,l,r,v;
+      while(q--){
+        cin>>op;
+       
+        if(op==1){
+            cin>>l>>r>>v;
+        
+           sg.RangeOR(l,r,v);
         }
-      
+        else{
+            cin>>l>>r;
+           cout<<sg.sum(l,r)<<nn;
+        }
+        
+      }
     }
 
 
     return 0;
 }
-

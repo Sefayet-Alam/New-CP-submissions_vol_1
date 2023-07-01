@@ -152,92 +152,6 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
-struct segment_tree{
-    ll size;
-    vector<ll>tree;
-    //INITIALIZATION
-    void init(ll n){
-        size=1;
-        while(size<n) size*=2;
-        tree.assign(2*size,0LL);
-    }
-    ll no_operation=LLONG_MAX;
-    ll merge(ll a,ll b){
-       if(b==no_operation) return a;
-       return b;
-    }
-    void apply_merge(ll &a,ll b){
-        a=merge(a,b);    
-    }   
-     void build(vector<ll> &a,ll x,ll lx,ll rx){
-        //linear time
-        if(rx-lx==1){
-            if(lx<a.size()){
-                tree[x]=a[lx];
-            }
-            return;
-        }
-        ll m=(lx+rx)/2;
-        build(a,2*x+1,lx,m);
-        build(a,2*x+2,m,rx);
-        tree[x]=merge(tree[2*x+1],tree[2*x+2]);
-    }
-    void build(vector<ll> &a){
-        //linear time
-        build(a,0,0,size);
-    }
-    //PROPAGATION
-    void progpagate(ll x,ll lx,ll rx){
-        if(rx-lx==1){
-            return;
-        }
-       apply_merge(tree[2*x+1],tree[x]);
-       apply_merge(tree[2*x+2],tree[x]);
-       tree[x]=no_operation;
-    }
-
-     ll get(ll i,ll x,ll lx,ll rx){
-        progpagate(x,lx,rx);
-        if(rx-lx==1) return tree[x];
-        ll m=(lx+rx)/2;
-        ll ret;
-        if(i<m){
-            ret=get(i,2*x+1,lx,m);
-        }
-        else{
-            ret=get(i,2*x+2,m,rx);
-        }
-        return merge(ret,tree[x]);
-    }
-    ll get(ll i){
-        //gets the value of the ith position
-        return get(i,0,0,size);
-    }
-
-  
-    ///RANGE modify
-    void modify(ll l,ll r,ll v,ll x,ll lx,ll rx){
-       
-        progpagate(x,lx,rx);
-        if(lx>=r || l>=rx){
-            return;
-        }
-        if(lx>=l && rx<=r){
-            apply_merge(tree[x],v);
-            return;
-        }
-        ll m=(lx+rx)/2;
-        modify(l,r,v,2*x+1,lx,m);
-        modify(l,r,v,2*x+2,m,rx);  
-    }
-    void modify(ll l,ll r,ll v){
-       //assigns v from l to r
-        modify(l,r,v,0,0,size);
-    }
-   
-};
-
-
 
 int main()
 {
@@ -246,30 +160,65 @@ int main()
     //setIO();
      //ll tno=1;;
      t=1;
-    //cin>>t;
+    cin>>t;
 
     while(t--){
-        ll n,q;
-        cin>>n>>q;
-        vector<ll>vec(n,0);
-
-        segment_tree sg;
-        sg.init(n);
-        // sg.build(vec);
-
-        ll op,l,r,x;
-        while(q--){
-            cin>>op;
-            if(op==1){
-                cin>>l>>r>>x;
-                sg.modify(l,r,x);
-            }
-            else{
-                cin>>l;
-                cout<<sg.get(l)<<nn;
-            }
+      ll n,k,x;
+      cin>>n>>k>>x;
+     
+      if(x!=1){
+        vector<ll>ans;
+        for(ll i=1;i<=n;i++){
+            ans.push_back(1);
+        }
+        cout<<"YES"<<nn;
+        cout<<ans.size()<<nn;
+        cout<<ans<<nn;
+        continue;
+      }
+      vector<ll>ans;
+      if(n==2 || n==3){
+        if(k<n){
+            cout<<"NO"<<nn;
+        }
+        else{
+        cout<<"YES"<<nn;
+        cout<<1<<nn;
+        cout<<n<<nn;
         }
       
+      }
+     else{
+        if(k==2){
+            if(n%2){
+            cout<<"NO"<<nn;
+            }
+            else{
+            cout<<"YES"<<nn;
+            while(n){
+                n-=2;
+                ans.push_back(2);
+            }
+            cout<<ans.size()<<nn;
+            cout<<ans<<nn;
+            }
+        }
+        else if(k==1){
+            cout<<"NO"<<nn;
+        }
+        else{
+            cout<<"YES"<<nn;
+            while(n>3){
+                n-=2;
+                ans.push_back(2);
+            }
+            if(n==3){ans.push_back(3);}
+            else ans.push_back(2);
+            cout<<ans.size()<<nn;
+            cout<<ans<<nn;
+        }
+     }
+    
     }
 
 
